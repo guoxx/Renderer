@@ -1,4 +1,8 @@
 #include "Renderer.h"
+#include "Vertex.h"
+#include "VertexProcessor.h"
+#include "FragmentProcessor.h"
+
 #include <stdio.h>
 #include <unistd.h>
 #include <math.h>
@@ -92,6 +96,33 @@ void Renderer::clearColorBuffer(const Vec3f &color){
         m_buffer[i] = c;
         i = i + 1;
     }
+}
+
+void Renderer::renderTriangle(int verticesCnt,
+                              Vec3f *vertices,
+                              Vec3f *colors,
+                              Vec3f *normals,
+                              Vec3f *textures)
+{
+    // TODO: face culling
+
+    Vertex *vertCache = new Vertex[verticesCnt];
+    VertexProcessor *vertProcessor = new VertexProcessor;
+    FragmentProcessor *fragProcessor = new FragmentProcessor;
+
+    vertProcessor->updateTransforms(*this);
+    int triangleCnt = verticesCnt / 3;
+    for (int i = 0; i < triangleCnt; i = i + 1) {
+        vertProcessor->triangle(&vertices[i * 3],
+                                &normals[i * 3],
+                                &colors[i * 3],
+                                &textures[i * 3],
+                                &vertCache[i * 3]);
+    }
+
+    delete fragProcessor;
+    delete vertProcessor;
+    delete [] vertCache;
 }
 
 void Renderer::drawDot(int x, int y, const Vec4f& color){

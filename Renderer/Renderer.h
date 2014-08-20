@@ -25,6 +25,10 @@ public:
         free(m_buffer);
     }
 
+    Matrix4f& getModelViewMatrix() { return m_modelviewMat; }
+    Matrix4f& getProjectionMatrix() { return m_projectionMat; }
+    Matrix4f& getViewportMatrix() { return m_viewportMat; }
+
     void lookat(Vec3f& eye, Vec3f& target, Vec3f& up);
 
     void setupViewParams(float fov, float aspect, float zNear, float zFar);
@@ -32,6 +36,12 @@ public:
     void viewport(int x, int y, int w, int h);
     
     void clearColorBuffer(const Vec3f &color);
+    
+    void renderTriangle(int verticesCnt,
+                        Vec3f *vertices,
+                        Vec3f *colors,
+                        Vec3f *normals,
+                        Vec3f *textures);
     
     void drawDot(int x, int y, const Vec4f& color);
     
