@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		B52CCC0F19A4F98800B7065D /* Vertex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B52CCC0D19A4F98800B7065D /* Vertex.cpp */; };
+		B544F7DC19A7958700DEF9A1 /* Fragment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B544F7DA19A7958700DEF9A1 /* Fragment.cpp */; };
+		B544F7DF19A797E400DEF9A1 /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B544F7DD19A797E400DEF9A1 /* FrameBuffer.cpp */; };
 		B59EC60C19A08F1000849C17 /* FragmentProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B59EC60319A08F1000849C17 /* FragmentProcessor.cpp */; };
 		B59EC60D19A08F1000849C17 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B59EC60519A08F1000849C17 /* main.cpp */; };
 		B59EC60E19A08F1000849C17 /* Rasterizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B59EC60619A08F1000849C17 /* Rasterizer.cpp */; };
@@ -33,6 +35,10 @@
 		B52CCC0D19A4F98800B7065D /* Vertex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex.cpp; sourceTree = "<group>"; };
 		B52CCC0E19A4F98800B7065D /* Vertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vertex.h; sourceTree = "<group>"; };
 		B53BCBDF19A3860D006E2AA2 /* utMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utMath.h; sourceTree = "<group>"; };
+		B544F7DA19A7958700DEF9A1 /* Fragment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fragment.cpp; sourceTree = "<group>"; };
+		B544F7DB19A7958700DEF9A1 /* Fragment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fragment.h; sourceTree = "<group>"; };
+		B544F7DD19A797E400DEF9A1 /* FrameBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameBuffer.cpp; sourceTree = "<group>"; };
+		B544F7DE19A797E400DEF9A1 /* FrameBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameBuffer.h; sourceTree = "<group>"; };
 		B59EC5B319A08EC100849C17 /* Renderer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Renderer; sourceTree = BUILT_PRODUCTS_DIR; };
 		B59EC60319A08F1000849C17 /* FragmentProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FragmentProcessor.cpp; sourceTree = "<group>"; };
 		B59EC60419A08F1000849C17 /* FragmentProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FragmentProcessor.h; sourceTree = "<group>"; };
@@ -84,8 +90,12 @@
 				B53BCBDF19A3860D006E2AA2 /* utMath.h */,
 				B52CCC0D19A4F98800B7065D /* Vertex.cpp */,
 				B52CCC0E19A4F98800B7065D /* Vertex.h */,
+				B544F7DA19A7958700DEF9A1 /* Fragment.cpp */,
+				B544F7DB19A7958700DEF9A1 /* Fragment.h */,
 				B59EC60819A08F1000849C17 /* Renderer.cpp */,
 				B59EC60919A08F1000849C17 /* Renderer.h */,
+				B544F7DD19A797E400DEF9A1 /* FrameBuffer.cpp */,
+				B544F7DE19A797E400DEF9A1 /* FrameBuffer.h */,
 				B59EC60319A08F1000849C17 /* FragmentProcessor.cpp */,
 				B59EC60419A08F1000849C17 /* FragmentProcessor.h */,
 				B59EC60619A08F1000849C17 /* Rasterizer.cpp */,
@@ -165,8 +175,10 @@
 				B59EC61919A0A53900849C17 /* NodeTriangle.cpp in Sources */,
 				B59EC61C19A0A57200849C17 /* NodeLine.cpp in Sources */,
 				B59EC60F19A08F1000849C17 /* Renderer.cpp in Sources */,
+				B544F7DF19A797E400DEF9A1 /* FrameBuffer.cpp in Sources */,
 				B59EC60D19A08F1000849C17 /* main.cpp in Sources */,
 				B59EC60E19A08F1000849C17 /* Rasterizer.cpp in Sources */,
+				B544F7DC19A7958700DEF9A1 /* Fragment.cpp in Sources */,
 				B59EC60C19A08F1000849C17 /* FragmentProcessor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

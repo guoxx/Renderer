@@ -1,7 +1,10 @@
 #include "Renderer.h"
 #include "Vertex.h"
+#include "Fragment.h"
 #include "VertexProcessor.h"
 #include "FragmentProcessor.h"
+#include "Rasterizer.h"
+#include "FrameBuffer.h"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -109,6 +112,7 @@ void Renderer::renderTriangle(int verticesCnt,
     Vertex *vertCache = new Vertex[verticesCnt];
     VertexProcessor *vertProcessor = new VertexProcessor;
     FragmentProcessor *fragProcessor = new FragmentProcessor;
+    Rasterizer *rasterizer = new Rasterizer(m_width, m_height);
 
     vertProcessor->updateTransforms(*this);
     int triangleCnt = verticesCnt / 3;
@@ -120,38 +124,12 @@ void Renderer::renderTriangle(int verticesCnt,
                                 &vertCache[i * 3]);
     }
     for (int i = 0; i < triangleCnt; i = i + 1) {
-        Vertex *a = &vertCache[i * 3];
-        Vertex *b = &vertCache[i * 3 + 1];
-        Vertex *c = &vertCache[i * 3 + 2];
-        #define CONVERT(val) \
-        Vec3f(val->vert.x/val->vert.w, \
-              val->vert.y/val->vert.w, \
-              val->vert.z/val->vert.w)
-        Vec3f pa = CONVERT(a);
-        Vec3f pb = CONVERT(b);
-        Vec3f pc = CONVERT(c);
-        #undef CONVERT
-
-        // TODO: frustum culling
-        for (float x = 0; x < m_width; ++x) {
-            for (float y = 0; y < m_height; ++y) {
-                float det = (pb.x - pa.x)*(pc.y - pa.y) - (pc.x - pa.x)*(pb.y - pa.y);
-                float beta = (pc.y - pa.y)*(x - pa.x) - (pb.y - pa.y)*(y - pa.y);
-                beta = beta / det;
-                float gamma = - (pc.x - pa.x)*(x - pa.x) + (pb.x - pa.x)*(y - pa.y);
-                gamma = gamma / det;
-
-                if ((0.0f <= beta && beta <= 1.0f) && (0.0f <= gamma && gamma <= 1.0f)) {
-                    float z = pa.z + beta * (pb.z - pa.z) + gamma * (pc.z - pa.z);
-                    (void)z;
-                    // TODO: construct fragment and pass to FragmentProcessor
-                }
-            }
-        }
+        rasterizer->rasterize(vertCache + i * 3, fragProcessor, frameBuffer);
     }
 
     delete fragProcessor;
     delete vertProcessor;
+    delete rasterizer;
     delete [] vertCache;
 }
 

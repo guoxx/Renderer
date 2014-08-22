@@ -7,6 +7,8 @@
 #include <cmath>
 #include <cstring>
 #include "utMath.h"
+#include "FrameBuffer.h"
+
 
 class Renderer {
 public:
@@ -19,10 +21,13 @@ public:
         m_height = h;
         m_buffer = (uint32_t*)malloc(sizeof(uint32_t) * m_width * m_height);
         bzero(m_buffer, sizeof(uint32_t) * m_width * m_height);
+        
+        frameBuffer = new FrameBuffer(m_width, m_height);
     }
 
     ~Renderer() {
         free(m_buffer);
+        delete frameBuffer;
     }
 
     Matrix4f& getModelViewMatrix() { return m_modelviewMat; }
@@ -55,6 +60,8 @@ private:
     Matrix4f m_modelviewMat;
     Matrix4f m_projectionMat;
     Matrix4f m_viewportMat;
+    
+    FrameBuffer *frameBuffer;
 };
 
 #endif
