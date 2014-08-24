@@ -68,10 +68,6 @@ void Renderer::setupViewParams(float fov, float aspect, float zNear, float zFar)
     float l = -r;
     float n = zNear;
     float f = zFar;
-    l = -0.6;
-    r = 0.6;
-    b = - 0.6;
-    t = 0.6;
     m_projectionMat.identity();
     m_projectionMat.c[0][0] = (2 * n) / (r - l);
     m_projectionMat.c[2][0] = (r + l) / (r - l);
@@ -91,9 +87,6 @@ void Renderer::viewport(int x, int y, int w, int h){
     m_viewportMat.c[3][0] = cx;
     m_viewportMat.c[1][1] = h/2;
     m_viewportMat.c[3][1] = cy;
-    // TODO: xxxx, why?
-    m_viewportMat.c[2][2] = 0.5;
-    m_viewportMat.c[3][2] = 0.5;
 }
 
 void Renderer::clearColorBuffer(const Vec3f &color){
