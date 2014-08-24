@@ -62,18 +62,22 @@ void Renderer::lookat(Vec3f& eye, Vec3f& target, Vec3f& up){
 }
 
 void Renderer::setupViewParams(float fov, float aspect, float zNear, float zFar){
-    float t = zNear * tanf(fov / 180.0f * M_PI);
+    float t = zNear * (float)tanf(fov / 180.0f);
     float b = -t;
     float r = t / aspect;
     float l = -r;
     float n = zNear;
     float f = zFar;
+    l = -0.6;
+    r = 0.6;
+    b = - 0.6;
+    t = 0.6;
     m_projectionMat.identity();
     m_projectionMat.c[0][0] = (2 * n) / (r - l);
     m_projectionMat.c[2][0] = (r + l) / (r - l);
     m_projectionMat.c[1][1] = (2 * n) / (t - b);
-    m_projectionMat.c[2][1] = (t + b) / (t - b);
-    m_projectionMat.c[2][3] = (n + f) / (n - f);
+    m_projectionMat.c[3][1] = (t + b) / (t - b);
+    m_projectionMat.c[2][2] = (n + f) / (n - f);
     m_projectionMat.c[3][2] = (2 * f * n) / (n - f);
     m_projectionMat.c[2][3] = -1;
     m_projectionMat.c[3][3] = 0;
@@ -117,14 +121,19 @@ void Renderer::renderTriangle(int verticesCnt,
     vertProcessor->updateTransforms(*this);
     int triangleCnt = verticesCnt / 3;
     for (int i = 0; i < triangleCnt; i = i + 1) {
-        vertProcessor->triangle(&vertices[i * 3],
-                                &normals[i * 3],
-                                &colors[i * 3],
-                                &textures[i * 3],
-                                &vertCache[i * 3]);
+        vertProcessor->triangle(vertices + i * 3,
+                                normals + i * 3,
+                                colors + i * 3,
+                                textures + i * 3,
+                                vertCache + i * 3);
     }
     for (int i = 0; i < triangleCnt; i = i + 1) {
         rasterizer->rasterize(vertCache + i * 3, fragProcessor, frameBuffer);
+    }
+    for (int x = 0; x < m_width; x = x + 1) {
+        for (int y = 0; y < m_height; y = y + 1) {
+            drawDot(x, y, Vec4f(frameBuffer->getColorBuffer(x, y)));
+        }
     }
 
     delete fragProcessor;

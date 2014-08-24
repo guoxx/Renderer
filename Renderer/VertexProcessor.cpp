@@ -6,16 +6,16 @@
 
 void VertexProcessor::updateTransforms(Renderer &renderer){
     m_mvMat = renderer.getModelViewMatrix();
-    m_mvpMat = renderer.getProjectionMatrix() * m_mvMat;
+    m_mvpMat = renderer.getViewportMatrix() * renderer.getProjectionMatrix() * m_mvMat;
     m_vpMat = renderer.getViewportMatrix();
 }
 
 void VertexProcessor::triangle(Vec3f *v, Vec3f *n, Vec3f *c, Vec3f *t, Vertex *vert){
     for (int i = 0; i < 3; i = i + 1) {
-        vert->vert = m_mvpMat * (Vec4f(*v));
+        (vert + i)->vert = m_mvpMat * (Vec4f(*(v + i)));
         // caculate normal and color
-        vert->normal = *n;
-        vert->color = *c;
-        vert->vEye = m_mvMat * (*v);
+        (vert + i)->normal = *(n + i);
+        (vert + i)->color = *(c + i);
+        (vert + i)->vEye = m_mvMat * (*(v + i));
     }
 }

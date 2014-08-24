@@ -2,16 +2,50 @@
 #include "utMath.h"
 #include "Renderer.h"
 
-int main( int argc, char **argv ) {
-    Renderer* render = new Renderer(300, 600);
-    render->viewport(50, 50, 200, 500);
+void scene0(Renderer *render) {
+    Vec3f v[3] = {
+        Vec3f(1, 0, 0), Vec3f(0, 2, 0), Vec3f(-1, 0, 0)
+    };
 
-    Vec3f clearColor(0, 1, 1);
+    Vec3f c[3] = {
+        Vec3f(1, 0, 0), Vec3f(0, 1, 0), Vec3f(0, 0, 1)
+    };
+
+    Vec3f n[3] = {
+        Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)
+    };
+
+    Vec3f v2[3] = {
+        Vec3f(0, 2, 0), Vec3f(1, 0, 0), Vec3f(-1, 0, 0)
+    };
+    
+    Vec3f c2[3] = {
+        Vec3f(0.25f, 0.75f, 0.25f), Vec3f(0.75f, 0.25f, 0.25f), Vec3f(0.25f, 0.25f, 0.75f)
+    };
+    
+    Vec3f n2[3] = {
+        Vec3f(0, 0, -1), Vec3f(0, 0, -1), Vec3f(0, 0, -1)
+    };
+
+    render->renderTriangle(3, v, c, n, NULL);
+    (void)v2;
+    (void)n2;
+    (void)c2;
+//    render->renderTriangle(3, v2, c2, n2, NULL);
+}
+
+int main( int argc, char **argv ) {
+    Renderer* render = new Renderer(512, 512);
+    Vec3f eye = Vec3f(3.0f, 4.0f, 5.0f);
+    Vec3f target = Vec3f(0.0f, 0.0f, 0.0f);
+    Vec3f up = Vec3f(0.0f, 1.0f, 0.0f);
+    render->lookat(eye, target, up);
+    render->viewport(0, 0, 512, 512);
+    render->setupViewParams(90.0f, 1.0f, 1.0f, 10.0f);
+
+    Vec3f clearColor(0, 0, 0);
     render->clearColorBuffer(clearColor);
-    Vec4f color(1.0f, 0.0f, 0.0f, 1.0f);
-    for (int i = 10; i < 290; ++i) {
-        render->drawDot(i, 500, color);
-    }
+    scene0(render);
 
     render->dumpTga("/tmp/aa.tga");
     free(render);
