@@ -15,8 +15,8 @@
 		B59EC60E19A08F1000849C17 /* Rasterizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B59EC60619A08F1000849C17 /* Rasterizer.cpp */; };
 		B59EC60F19A08F1000849C17 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B59EC60819A08F1000849C17 /* Renderer.cpp */; };
 		B59EC61019A08F1000849C17 /* VertexProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B59EC60A19A08F1000849C17 /* VertexProcessor.cpp */; };
-		B59EC61919A0A53900849C17 /* NodeTriangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B59EC61719A0A53900849C17 /* NodeTriangle.cpp */; };
-		B59EC61C19A0A57200849C17 /* NodeLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B59EC61A19A0A57200849C17 /* NodeLine.cpp */; };
+		B5BCF1D219AB746E00DECA16 /* libglfw3.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5BCF1D119AB746E00DECA16 /* libglfw3.3.0.dylib */; };
+		B5BCF1D419AB7BDB00DECA16 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5BCF1D319AB7BDB00DECA16 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,11 +49,8 @@
 		B59EC60919A08F1000849C17 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		B59EC60A19A08F1000849C17 /* VertexProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VertexProcessor.cpp; sourceTree = "<group>"; };
 		B59EC60B19A08F1000849C17 /* VertexProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VertexProcessor.h; sourceTree = "<group>"; };
-		B59EC61619A0A4BF00849C17 /* RenderableProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderableProtocol.h; sourceTree = "<group>"; };
-		B59EC61719A0A53900849C17 /* NodeTriangle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NodeTriangle.cpp; sourceTree = "<group>"; };
-		B59EC61819A0A53900849C17 /* NodeTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeTriangle.h; sourceTree = "<group>"; };
-		B59EC61A19A0A57200849C17 /* NodeLine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NodeLine.cpp; sourceTree = "<group>"; };
-		B59EC61B19A0A57200849C17 /* NodeLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeLine.h; sourceTree = "<group>"; };
+		B5BCF1D119AB746E00DECA16 /* libglfw3.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw3.3.0.dylib; path = ../../../../../usr/local/Cellar/glfw3/3.0.4/lib/libglfw3.3.0.dylib; sourceTree = "<group>"; };
+		B5BCF1D319AB7BDB00DECA16 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +58,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5BCF1D419AB7BDB00DECA16 /* OpenGL.framework in Frameworks */,
+				B5BCF1D219AB746E00DECA16 /* libglfw3.3.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				B59EC5B519A08EC100849C17 /* Renderer */,
+				B5BCF1D019AB6EC500DECA16 /* Frameworks */,
 				B59EC5B419A08EC100849C17 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -102,21 +102,17 @@
 				B59EC60719A08F1000849C17 /* Rasterizer.h */,
 				B59EC60A19A08F1000849C17 /* VertexProcessor.cpp */,
 				B59EC60B19A08F1000849C17 /* VertexProcessor.h */,
-				B59EC61219A0A45100849C17 /* SceneNodes */,
 			);
 			path = Renderer;
 			sourceTree = "<group>";
 		};
-		B59EC61219A0A45100849C17 /* SceneNodes */ = {
+		B5BCF1D019AB6EC500DECA16 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B59EC61619A0A4BF00849C17 /* RenderableProtocol.h */,
-				B59EC61719A0A53900849C17 /* NodeTriangle.cpp */,
-				B59EC61819A0A53900849C17 /* NodeTriangle.h */,
-				B59EC61A19A0A57200849C17 /* NodeLine.cpp */,
-				B59EC61B19A0A57200849C17 /* NodeLine.h */,
+				B5BCF1D319AB7BDB00DECA16 /* OpenGL.framework */,
+				B5BCF1D119AB746E00DECA16 /* libglfw3.3.0.dylib */,
 			);
-			path = SceneNodes;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -172,8 +168,6 @@
 			files = (
 				B59EC61019A08F1000849C17 /* VertexProcessor.cpp in Sources */,
 				B52CCC0F19A4F98800B7065D /* Vertex.cpp in Sources */,
-				B59EC61919A0A53900849C17 /* NodeTriangle.cpp in Sources */,
-				B59EC61C19A0A57200849C17 /* NodeLine.cpp in Sources */,
 				B59EC60F19A08F1000849C17 /* Renderer.cpp in Sources */,
 				B544F7DF19A797E400DEF9A1 /* FrameBuffer.cpp in Sources */,
 				B59EC60D19A08F1000849C17 /* main.cpp in Sources */,
@@ -189,7 +183,7 @@
 		B59EC5BA19A08EC100849C17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -218,6 +212,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -227,7 +226,7 @@
 		B59EC5BB19A08EC100849C17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -251,6 +250,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
 			};
@@ -259,10 +263,14 @@
 		B59EC5BD19A08EC100849C17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_NAME)",
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/glfw3/3.0.4/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -271,10 +279,14 @@
 		B59EC5BE19A08EC100849C17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_NAME)",
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/glfw3/3.0.4/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

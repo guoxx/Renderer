@@ -142,6 +142,26 @@ void Renderer::drawDot(int x, int y, const Vec4f& color){
     m_buffer[y * m_width + x] = c;
 }
 
+void Renderer::dumpRaw(uint8_t **data, int *sz) {
+    assert(data != NULL);
+    *data = (uint8_t*)malloc(m_width * m_height * 3);
+    for (int r = 0; r < m_height; ++r) {
+        for (int c = 0; c < m_width; ++c) {
+            int idx = r * m_width + c;
+            uint32_t clr = m_buffer[idx];
+            uint8_t* p = (uint8_t*)&clr;
+            uint8_t* tmp = (*data) + idx * 3;
+            // write BGR
+            *(tmp + 0) = *(p + 2);
+            *(tmp + 1) = *(p + 1);
+            *(tmp + 2) = *(p + 0);
+        }
+    }
+    if (sz != NULL) {
+        *sz = m_width * m_height * 3;
+    }
+}
+
 bool Renderer::dumpTga(const char* filename) {
 #pragma pack(1)
     typedef struct {
@@ -179,7 +199,7 @@ bool Renderer::dumpTga(const char* filename) {
     hdr.height = m_height;
     hdr.bitsperpixel = 24;
     hdr.imagedescriptor = 0;
-    fwrite(&hdr, sizeof(uint8_t), 18, f);
+    //fwrite(&hdr, sizeof(uint8_t), 18, f);
     for (int r = 0; r < m_height; ++r) {
         for (int c = 0; c < m_width; ++c) {
             int idx = r * m_width + c;
