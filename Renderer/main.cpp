@@ -58,7 +58,7 @@ void redraw() {
     render->viewport(0, 0, 512, 512);
     render->setupViewParams(90.0f, 1.0f, 1.0f, 10.0f);
 
-    Vec3f clearColor(255, 0, 0);
+    Vec3f clearColor(0, 0, 0);
     render->clearColorBuffer(clearColor);
     scene0(render);
 

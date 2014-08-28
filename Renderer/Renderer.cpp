@@ -90,11 +90,12 @@ void Renderer::viewport(int x, int y, int w, int h){
 }
 
 void Renderer::clearColorBuffer(const Vec3f &color){
-    uint32_t c = _color3ToUInt(color);
-    int i = 0;
-    while (i < m_width * m_height) {
-        m_buffer[i] = c;
-        i = i + 1;
+    for (int x = 0; x < m_width; x = x + 1)
+    {
+        for (int y = 0; y < m_height; y = y + 1)
+        {
+            frameBuffer->setColorBuffer(x, y, color);
+        }
     }
 }
 
@@ -137,19 +138,19 @@ void Renderer::renderTriangle(int verticesCnt,
 
 void Renderer::drawDot(int x, int y, const Vec4f& color){
     assert(x < m_width && y < m_height);
-    
-    uint32_t c = _color4ToUInt(color);
-    m_buffer[y * m_width + x] = c;
+    // TODO: blend
+    frameBuffer->setColorBuffer(x, y, Vec3f(color.x, color.y, color.z));
 }
 
 void Renderer::dumpRaw(uint8_t **data, int *sz) {
     assert(data != NULL);
+
     *data = (uint8_t*)malloc(m_width * m_height * 3);
-    for (int r = 0; r < m_height; ++r) {
-        for (int c = 0; c < m_width; ++c) {
-            int idx = r * m_width + c;
-            uint32_t clr = m_buffer[idx];
+    for (int x = 0; x < m_width; x = x + 1) {
+        for (int y = 0; y < m_height; y = y + 1) {
+            uint32_t clr = _color3ToUInt(frameBuffer->getColorBuffer(x, y));
             uint8_t* p = (uint8_t*)&clr;
+            int idx = y * m_width + x;
             uint8_t* tmp = (*data) + idx * 3;
             // write BGR
             *(tmp + 0) = *(p + 2);
@@ -161,57 +162,3 @@ void Renderer::dumpRaw(uint8_t **data, int *sz) {
         *sz = m_width * m_height * 3;
     }
 }
-
-bool Renderer::dumpTga(const char* filename) {
-#pragma pack(1)
-    typedef struct {
-        char  idlength;
-        char  colourmaptype;
-        char  datatypecode;
-        short int colourmaporigin;
-        short int colourmaplength;
-        char  colourmapdepth;
-        short int x_origin;
-        short int y_origin;
-        short width;
-        short height;
-        char  bitsperpixel;
-        char  imagedescriptor;
-    } HEADER;
-#pragma pack()
-
-    FILE *f = fopen(filename, "wb");
-    if (f == NULL) {
-        return false;
-    }
-
-    assert(sizeof(HEADER) == 18);
-    HEADER hdr;
-    hdr.idlength = 0;
-    hdr.colourmaptype = 0;
-    hdr.datatypecode = 2;
-    hdr.colourmaporigin = 0;
-    hdr.colourmaplength = 0;
-    hdr.colourmapdepth = 0;
-    hdr.x_origin = 0;
-    hdr.y_origin = 0;
-    hdr.width = m_width;
-    hdr.height = m_height;
-    hdr.bitsperpixel = 24;
-    hdr.imagedescriptor = 0;
-    //fwrite(&hdr, sizeof(uint8_t), 18, f);
-    for (int r = 0; r < m_height; ++r) {
-        for (int c = 0; c < m_width; ++c) {
-            int idx = r * m_width + c;
-            uint32_t clr = m_buffer[idx];
-            uint8_t* p = (uint8_t*)&clr;
-            // write BGR
-            fwrite(p + 2, sizeof(uint8_t), 1, f);
-            fwrite(p + 1, sizeof(uint8_t), 1, f);
-            fwrite(p + 0, sizeof(uint8_t), 1, f);
-        }
-    }
-    fclose(f);
-    return true;
-}
-;

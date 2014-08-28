@@ -22,7 +22,7 @@ public:
         delete [] depthBuffer;
     }
 
-    void setColorBuffer(int x, int y, Vec3f &val) {
+    void setColorBuffer(int x, int y, const Vec3f &val) {
         colorBuffer[x + y * width] = val;
     }
 

@@ -19,14 +19,11 @@ public:
     Renderer(int w, int h) {
         m_width = w;
         m_height = h;
-        m_buffer = (uint32_t*)malloc(sizeof(uint32_t) * m_width * m_height);
-        bzero(m_buffer, sizeof(uint32_t) * m_width * m_height);
         
         frameBuffer = new FrameBuffer(m_width, m_height);
     }
 
     ~Renderer() {
-        free(m_buffer);
         delete frameBuffer;
     }
 
@@ -51,12 +48,10 @@ public:
     void drawDot(int x, int y, const Vec4f& color);
 
     void dumpRaw(uint8_t **data, int *sz);
-    bool dumpTga(const char* filename);
 
 private:
     int m_width;
     int m_height;
-    uint32_t* m_buffer;
     
     Matrix4f m_modelviewMat;
     Matrix4f m_projectionMat;
