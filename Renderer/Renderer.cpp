@@ -99,6 +99,36 @@ void Renderer::clearColorBuffer(const Vec3f &color){
     }
 }
 
+void Renderer::renderLine(int verticesCnt,
+                          Vec3f *vertices,
+                          Vec3f *colors)
+{
+    Vertex *vertCache = new Vertex[verticesCnt];
+
+    VertexProcessor vertProcessor;
+    FragmentProcessor fragProcessor;
+    Rasterizer rasterizer(m_width, m_height);
+
+    vertProcessor.updateTransforms(*this);
+    int lineCnt = verticesCnt / 2;
+    for (int i = 0; i < lineCnt; i = i + 1)
+    {
+        vertProcessor.line(vertices + i * 2,
+                           colors + i * 2,
+                           vertCache + i * 2);
+    }
+    for (int i = 0; i < lineCnt; i = i + 1) {
+        rasterizer.lineSegment(vertCache + i * 2, fragProcessor, *frameBuffer);
+    }
+    for (int x = 0; x < m_width; x = x + 1) {
+        for (int y = 0; y < m_height; y = y + 1) {
+            drawDot(x, y, Vec4f(frameBuffer->getColorBuffer(x, y)));
+        }
+    }
+
+    delete [] vertCache;
+}
+
 void Renderer::renderTriangle(int verticesCnt,
                               Vec3f *vertices,
                               Vec3f *colors,

@@ -12,10 +12,6 @@
 
 class Renderer {
 public:
-    Renderer() {
-        assert(false);
-    }
-
     Renderer(int w, int h) {
         m_width = w;
         m_height = h;
@@ -39,6 +35,10 @@ public:
     
     void clearColorBuffer(const Vec3f &color);
     
+    void renderLine(int lineCnt,
+                    Vec3f *vertices,
+                    Vec3f *colors);
+
     void renderTriangle(int verticesCnt,
                         Vec3f *vertices,
                         Vec3f *colors,

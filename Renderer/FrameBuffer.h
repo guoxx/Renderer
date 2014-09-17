@@ -6,10 +6,6 @@
 
 class FrameBuffer {
 public:
-    FrameBuffer () {
-        assert(false);
-    }
-
     FrameBuffer(int w, int h) {
         width = w;
         height = h;

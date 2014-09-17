@@ -9,53 +9,69 @@
 #include "Renderer.h"
 
 GLuint texId = 0;
-int screenWidth = 512;
-int screenHeight = 512;
+int screenWidth = 1024;
+int screenHeight = 1024;
 
 void scene0(Renderer *render) {
 
-    Vec3f v[3] = {
-        Vec3f(1, 0, 0), Vec3f(0, 2, 0), Vec3f(-1, 0, 0)
-    };
+    {
+        Vec3f v[3] = {
+            Vec3f(1, 0, 0), Vec3f(0, 2, 0), Vec3f(-1, 0, 0)
+        };
+        
+        Vec3f c[3] = {
+            Vec3f(1, 0, 0), Vec3f(0, 1, 0), Vec3f(0, 0, 1)
+        };
+        
+        Vec3f n[3] = {
+            Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)
+        };
+        
+        Vec3f v2[3] = {
+            Vec3f(0, 2, 0), Vec3f(1, 0, 0), Vec3f(-1, 0, 0)
+        };
+        
+        Vec3f c2[3] = {
+            Vec3f(0.25f, 0.75f, 0.25f), Vec3f(0.75f, 0.25f, 0.25f), Vec3f(0.25f, 0.25f, 0.75f)
+        };
+        
+        Vec3f n2[3] = {
+            Vec3f(0, 0, -1), Vec3f(0, 0, -1), Vec3f(0, 0, -1)
+        };
+        
+        render->renderTriangle(3, v, c, n, NULL);
+    }
 
-    Vec3f c[3] = {
-        Vec3f(1, 0, 0), Vec3f(0, 1, 0), Vec3f(0, 0, 1)
-    };
+    {
+        Vec3f v[2];
+        Vec3f c[3] = {
+            Vec3f(1, 0, 0), Vec3f(0, 1, 0), Vec3f(0, 0, 1)
+        };
+        v[0] = Vec3f(1, 0, 0);
+        v[1] = Vec3f(0, 2, 0);
+        render->renderLine(2, v, c);
+        v[0] = Vec3f(0, 2, 0);
+        v[1] = Vec3f(-1, 0, 0);
+        render->renderLine(2, v, c);
+        v[0] = Vec3f(1, 0, 0);
+        v[1] =  Vec3f(-1, 0, 0);
+        render->renderLine(2, v, c);
+    }
 
-    Vec3f n[3] = {
-        Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)
-    };
-
-    Vec3f v2[3] = {
-        Vec3f(0, 2, 0), Vec3f(1, 0, 0), Vec3f(-1, 0, 0)
-    };
-    
-    Vec3f c2[3] = {
-        Vec3f(0.25f, 0.75f, 0.25f), Vec3f(0.75f, 0.25f, 0.25f), Vec3f(0.25f, 0.25f, 0.75f)
-    };
-    
-    Vec3f n2[3] = {
-        Vec3f(0, 0, -1), Vec3f(0, 0, -1), Vec3f(0, 0, -1)
-    };
-
-    render->renderTriangle(3, v, c, n, NULL);
-    (void)v2;
-    (void)n2;
-    (void)c2;
 //    render->renderTriangle(3, v2, c2, n2, NULL);
 }
 
 void redraw() {
     static Renderer* render = NULL;
     if (render == NULL) {
-        render = new Renderer(512, 512);
+        render = new Renderer(screenWidth, screenHeight);
     }
 
     Vec3f eye = Vec3f(3.0f, 4.0f, 5.0f);
     Vec3f target = Vec3f(0.0f, 0.0f, 0.0f);
     Vec3f up = Vec3f(0.0f, 1.0f, 0.0f);
     render->lookat(eye, target, up);
-    render->viewport(0, 0, 512, 512);
+    render->viewport(0, 0, screenWidth, screenHeight);
     render->setupViewParams(90.0f, 1.0f, 1.0f, 10.0f);
 
     Vec3f clearColor(0, 0, 0);
@@ -66,7 +82,6 @@ void redraw() {
     render->dumpRaw(&data, NULL);
 
     glBindTexture(GL_TEXTURE_2D, texId);
-//    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, screenWidth, screenHeight, GL_BGR, GL_UNSIGNED_SHORT, data);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, screenWidth, screenHeight, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -95,7 +110,8 @@ void render() {
 }
 
 void reshape(GLFWwindow* window, int w, int h) {
-    glViewport( 0, 0, (GLsizei)w, (GLsizei)h );
+    // TODO: retina display support
+    glViewport( 0, 0, (GLsizei)w * 2, (GLsizei)h * 2 );
 
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
