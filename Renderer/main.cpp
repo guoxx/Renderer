@@ -9,8 +9,8 @@
 #include "Renderer.h"
 
 GLuint texId = 0;
-int screenWidth = 1024;
-int screenHeight = 1024;
+int screenWidth = 512;
+int screenHeight = 512;
 
 void scene0(Renderer *render) {
 
@@ -54,6 +54,9 @@ void scene0(Renderer *render) {
         v[1] = Vec3f(-1, 0, 0);
         render->renderLine(2, v, c);
         v[0] = Vec3f(1, 0, 0);
+        v[1] =  Vec3f(-1, 0, 0);
+        render->renderLine(2, v, c);
+        v[0] = Vec3f(1, 0, -3);
         v[1] =  Vec3f(-1, 0, 0);
         render->renderLine(2, v, c);
     }
