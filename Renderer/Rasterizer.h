@@ -15,7 +15,7 @@ public:
     }
 
     void lineSegment(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &fb);
-    void rasterize(Vertex *vertices, FragmentProcessor *fp, FrameBuffer *fb);
+    void triangle(Vertex *vertices, FragmentProcessor *fp, FrameBuffer *fbuffer);
 
 private:
     int width;

@@ -127,9 +127,11 @@ void Rasterizer::lineSegment(Vertex *vertices, FragmentProcessor &fp, FrameBuffe
     {
         assert(0);
     }
+    
+    #undef f
 }
 
-void Rasterizer::rasterize(Vertex *vertices, FragmentProcessor *fp, FrameBuffer *fb){
+void Rasterizer::triangle(Vertex *vertices, FragmentProcessor *fp, FrameBuffer *fbuffer){
     Vertex &a = *vertices;
     Vertex &b = *(vertices + 1);
     Vertex &c = *(vertices + 2);
@@ -145,22 +147,32 @@ void Rasterizer::rasterize(Vertex *vertices, FragmentProcessor *fp, FrameBuffer 
     Vec3f colorB = b.color;
     Vec3f colorC = c.color;
 
-    // TODO: frustum culling
-    for (float x = 0; x < width; ++x) {
-        for (float y = 0; y < height; ++y) {
-            float beta = ((pa.y - pc.y)*x + (pc.x - pa.x)*y + pa.x*pc.y - pc.x*pa.y) /
-                         ((pa.y - pc.y)*pb.x + (pc.x - pa.x)*pb.y + pa.x*pc.y - pc.x*pa.y);
-            float gamma = ((pa.y - pb.y)*x + (pb.x - pa.x)*y + pa.x*pb.y - pb.x*pa.y) /
-                          ((pa.y - pb.y)*pc.x + (pb.x - pa.x)*pc.y + pa.x*pb.y - pb.x*pa.y);
+    int minx = floorf(minf(minf(pa.x, pb.x), pc.x));
+    int maxx = ceilf(maxf(maxf(pa.x, pb.x), pc.x));
+    int miny = floorf(minf(minf(pa.y, pb.y), pc.y));
+    int maxy = ceilf(maxf(maxf(pa.y, pb.y), pc.y));
 
-            if ((0.0f <= beta && beta <= 1.0f) && (0.0f <= gamma && gamma <= 1.0f) && (beta + gamma) <= 1.0f) {
+    #define f(p1, p0, xvar, yvar) ((p1.y - p0.y)*(xvar) + (p0.x - p1.x)*(yvar) + (p1.x*p0.y - p0.x*p1.y))
+
+    // TODO: frustum culling
+    float fa = f(pc, pb, pa.x, pa.y);
+    float fb = f(pc, pa, pb.x, pb.y);
+    float fg = f(pb, pa, pc.x, pc.y);
+    for (int x = minx; x <= maxx; x = x + 1) {
+        for (int y = miny; y <= maxy; y = y + 1) {
+            float alpha = f(pc, pb, x, y) / fa;
+            float beta = f(pc, pa, x, y) / fb;
+            float gamma = f(pb, pa, x, y) / fg;
+            if (alpha > 0 && beta > 0 && gamma > 0) {
                 float z = pa.z + beta * (pb.z - pa.z) + gamma * (pc.z - pa.z);
                 (void)z;
                 // TODO: handle depth buffer
 
                 Vec3f color = colorA + (colorB - colorA) * beta + (colorC - colorA) * gamma;
-                fb->setColorBuffer(x, y, color);
+                fbuffer->setColorBuffer(x, y, color);
             }
         }
     }
+    
+    #undef f
 }

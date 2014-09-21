@@ -147,7 +147,7 @@ void Renderer::renderTriangle(int verticesCnt,
                                 vertCache + i * 3);
     }
     for (int i = 0; i < triangleCnt; i = i + 1) {
-        rasterizer->rasterize(vertCache + i * 3, fragProcessor, frameBuffer);
+        rasterizer->triangle(vertCache + i * 3, fragProcessor, frameBuffer);
     }
 
     delete fragProcessor;
