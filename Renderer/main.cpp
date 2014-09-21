@@ -58,7 +58,7 @@ void scene0(Renderer *render) {
         render->renderLine(2, v, c);
         v[0] = Vec3f(1, 0, -3);
         v[1] =  Vec3f(-1, 0, 0);
-        render->renderLine(2, v, c);
+        render->renderLine(2, v, c + 1);
     }
 
 //    render->renderTriangle(3, v2, c2, n2, NULL);
@@ -151,6 +151,7 @@ int main(int argc, char **argv) {
     glfwSetCursorPosCallback(window, _mouseMoveListener);
 
     glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
 
     reshape(window, screenWidth, screenHeight);
 

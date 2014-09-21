@@ -120,11 +120,6 @@ void Renderer::renderLine(int verticesCnt,
     for (int i = 0; i < lineCnt; i = i + 1) {
         rasterizer.lineSegment(vertCache + i * 2, fragProcessor, *frameBuffer);
     }
-    for (int x = 0; x < m_width; x = x + 1) {
-        for (int y = 0; y < m_height; y = y + 1) {
-            drawDot(x, y, Vec4f(frameBuffer->getColorBuffer(x, y)));
-        }
-    }
 
     delete [] vertCache;
 }
@@ -154,22 +149,11 @@ void Renderer::renderTriangle(int verticesCnt,
     for (int i = 0; i < triangleCnt; i = i + 1) {
         rasterizer->rasterize(vertCache + i * 3, fragProcessor, frameBuffer);
     }
-    for (int x = 0; x < m_width; x = x + 1) {
-        for (int y = 0; y < m_height; y = y + 1) {
-            drawDot(x, y, Vec4f(frameBuffer->getColorBuffer(x, y)));
-        }
-    }
 
     delete fragProcessor;
     delete vertProcessor;
     delete rasterizer;
     delete [] vertCache;
-}
-
-void Renderer::drawDot(int x, int y, const Vec4f& color){
-    assert(x < m_width && y < m_height);
-    // TODO: blend
-    frameBuffer->setColorBuffer(x, y, Vec3f(color.x, color.y, color.z));
 }
 
 void Renderer::dumpRaw(uint8_t **data, int *sz) {

@@ -44,8 +44,6 @@ public:
                         Vec3f *colors,
                         Vec3f *normals,
                         Vec3f *textures);
-    
-    void drawDot(int x, int y, const Vec4f& color);
 
     void dumpRaw(uint8_t **data, int *sz);
 

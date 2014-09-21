@@ -6,6 +6,7 @@
 void Rasterizer::lineSegment(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &fb)
 {
     Vec3f p[2];
+    Vec3f cl[2];
 
     Vertex &vertA = *vertices;
     Vertex &vertB = *(vertices + 1);
@@ -15,25 +16,28 @@ void Rasterizer::lineSegment(Vertex *vertices, FragmentProcessor &fp, FrameBuffe
           val.vert.z/val.vert.w)
     p[0] = CONVERT(vertA);
     p[1] = CONVERT(vertB);
+    cl[0] = vertA.color;
+    cl[1] = vertB.color;
     #undef CONVERT
-    Vec3f colorA = vertA.color;
-    Vec3f colorB = vertB.color;
 
     // f(x,y) = (y1 - y0)*x + (x0 - x1)*y + (x1*y0 - x0*y1) = a*x + b*y + c;
     int i0 = (p[0].x <= p[1].x) ? 0 : 1;
     int i1 = (i0 + 1) % 2;
-    
+
     int x0 = p[i0].x;
     int y0 = p[i0].y;
     int z0 = p[i0].z;
     int x1 = p[i1].x;
     int y1 = p[i1].y;
     int z1 = p[i1].z;
+    Vec3f deltaColor = (cl[i1] - cl[i0]) / (p[i0] - p[i1]).length();
+
     #define f(x,y) (y1 - y0)*(x) + (x0 - x1)*(y) + (x1*y0 - x0*y1)
-    
+
     int a = int(y1 - y0);
     int b = int(x0 - x1);
     int c = int(x1 * y0 - x0 * y1);
+    Vec3f color = cl[i0];
     assert(b <= 0);
     if (a <= b)
     {
@@ -42,7 +46,7 @@ void Rasterizer::lineSegment(Vertex *vertices, FragmentProcessor &fp, FrameBuffe
         float d = f(x0 + 0.5f, y0 - 1);
         for (int y = y0; y >= y1; y = y - 1)
         {
-            Vec3f color(255, 0, 0);
+            color = color + deltaColor;
             fb.setColorBuffer(x, y, color);
 
             if (d >= 0)
@@ -63,7 +67,7 @@ void Rasterizer::lineSegment(Vertex *vertices, FragmentProcessor &fp, FrameBuffe
         float d = f(x0 + 1, y0 - 0.5f);
         for (int x = x0; x <= x1; x = x + 1)
         {
-            Vec3f color(255, 0, 0);
+            color = color + deltaColor;
             fb.setColorBuffer(x, y, color);
             
             if (d <= 0)
@@ -84,7 +88,7 @@ void Rasterizer::lineSegment(Vertex *vertices, FragmentProcessor &fp, FrameBuffe
         float d = f(x0 + 1, y0 + 0.5f);
         for (int x = x0; x <= x1; x = x + 1)
         {
-            Vec3f color(255, 0, 0);
+            color = color + deltaColor;
             fb.setColorBuffer(x, y, color);
             
             if (d >= 0)
@@ -105,7 +109,7 @@ void Rasterizer::lineSegment(Vertex *vertices, FragmentProcessor &fp, FrameBuffe
         float d = f(x0 + 0.5f, y0 + 1);
         for (int y = y0; y <= y1; y = y + 1)
         {
-            Vec3f color(255, 0, 0);
+            color = color + deltaColor;
             fb.setColorBuffer(x, y, color);
             
             if (d <= 0)
