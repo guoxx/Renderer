@@ -1,0 +1,24 @@
+cmake_minimum_required(VERSION 3.0.2)
+
+# Project details.
+project(Renderer)
+
+SET(${PROJECT_NAME}_MAJOR_VERSION 0)
+SET(${PROJECT_NAME}_MINOR_VERSION 1)
+SET(${PROJECT_NAME}_PATCH_LEVEL 0)
+
+# Look for required GLFW library
+find_package(GLFW)
+
+# Set binaries output folder.
+SET(HORDE3D_OUTPUT_PATH_PREFIX "${PROJECT_BINARY_DIR}/Binaries")
+SET(HORDE3D_OUTPUT_PATH_SUFFIX "")
+IF(${CMAKE_CFG_INTDIR} STREQUAL ".")
+    SET(HORDE3D_OUTPUT_PATH_SUFFIX ${CMAKE_BUILD_TYPE})
+    IF(NOT HORDE3D_OUTPUT_PATH_SUFFIX)
+        SET(HORDE3D_OUTPUT_PATH_SUFFIX "Release")
+    ENDIF(NOT HORDE3D_OUTPUT_PATH_SUFFIX)
+ENDIF(${CMAKE_CFG_INTDIR} STREQUAL ".")
+
+# Add engine target.
+add_subdirectory(Renderer)
