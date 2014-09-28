@@ -3,7 +3,7 @@
 
 #include "utMath.h"
 
-class Vertex;
+struct Vertex;
 class Renderer;
 
 class VertexProcessor {

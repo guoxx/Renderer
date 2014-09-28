@@ -1,7 +1,7 @@
 #ifndef __FRAGMENTPROCESSOR_H__
 #define __FRAGMENTPROCESSOR_H__
 
-class Fragment;
+struct Fragment;
 class FrameBuffer;
 
 class FragmentProcessor {
