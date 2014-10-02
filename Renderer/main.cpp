@@ -7,6 +7,7 @@
 #include <GLFW/glfw3native.h>
 #include "utMath.h"
 #include "Renderer.h"
+#include "Texture.h"
 
 GLuint texId = 0;
 int screenWidth = 512;
@@ -16,7 +17,7 @@ void scene0(Renderer *render) {
 
     {
         Vec3f v[3] = {
-            Vec3f(1, 0, 0), Vec3f(0, 2, 0), Vec3f(-1, 0, 0)
+            Vec3f(-1, 0, 0), Vec3f(1, 0, 0), Vec3f(0, 2, 0)
         };
         
         Vec3f c[3] = {
@@ -27,19 +28,26 @@ void scene0(Renderer *render) {
             Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)
         };
         
-        Vec3f v2[3] = {
-            Vec3f(0, 2, 0), Vec3f(1, 0, 0), Vec3f(-1, 0, 0)
+        Vec3f t[3] = {
+            Vec3f(0, 0, 0), Vec3f(1, 0, 0), Vec3f(0, 1, 0)
         };
         
-        Vec3f c2[3] = {
-            Vec3f(0.25f, 0.75f, 0.25f), Vec3f(0.75f, 0.25f, 0.25f), Vec3f(0.25f, 0.25f, 0.75f)
-        };
+//        Vec3f v2[3] = {
+//            Vec3f(0, 2, 0), Vec3f(1, 0, 0), Vec3f(-1, 0, 0)
+//        };
+//        
+//        Vec3f c2[3] = {
+//            Vec3f(0.25f, 0.75f, 0.25f), Vec3f(0.75f, 0.25f, 0.25f), Vec3f(0.25f, 0.25f, 0.75f)
+//        };
+//        
+//        Vec3f n2[3] = {
+//            Vec3f(0, 0, -1), Vec3f(0, 0, -1), Vec3f(0, 0, -1)
+//        };
         
-        Vec3f n2[3] = {
-            Vec3f(0, 0, -1), Vec3f(0, 0, -1), Vec3f(0, 0, -1)
-        };
-        
-        render->renderTriangle(3, v, c, n, NULL);
+        Texture *tex = new Texture();
+        const char *tgaFile = "/Users/ben/Downloads/aaa.tga";
+        tex->loadTga(*tgaFile);
+        render->renderTriangle(3, v, c, n, t, tex);
     }
 
     {

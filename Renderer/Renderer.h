@@ -10,6 +10,8 @@
 #include "FrameBuffer.h"
 
 
+class Texture;
+
 class Renderer {
 public:
     Renderer(int w, int h) {
@@ -43,7 +45,8 @@ public:
                         Vec3f *vertices,
                         Vec3f *colors,
                         Vec3f *normals,
-                        Vec3f *textures);
+                        Vec3f *textures,
+                        Texture *tex);
 
     void dumpRaw(uint8_t **data, int *sz);
 

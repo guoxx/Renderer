@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <sys/types.h>
+#include "utMath.h"
 
 class Texture {
 public:
@@ -20,6 +21,7 @@ public:
         }
     }
 
+    Vec3f getColor(float u, float v);
     bool loadTga(const char &file);
     bool dumpTga(const char &file, bool overwrite);
 

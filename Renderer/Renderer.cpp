@@ -5,6 +5,7 @@
 #include "FragmentProcessor.h"
 #include "Rasterizer.h"
 #include "FrameBuffer.h"
+#include "Texture.h"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -107,7 +108,7 @@ void Renderer::renderLine(int verticesCnt,
 
     VertexProcessor vertProcessor;
     FragmentProcessor fragProcessor;
-    Rasterizer rasterizer(m_width, m_height);
+    Rasterizer rasterizer;
 
     vertProcessor.updateTransforms(*this);
     int lineCnt = verticesCnt / 2;
@@ -128,14 +129,14 @@ void Renderer::renderTriangle(int verticesCnt,
                               Vec3f *vertices,
                               Vec3f *colors,
                               Vec3f *normals,
-                              Vec3f *textures)
-{
+                              Vec3f *textures,
+                              Texture *tex) {
     // TODO: face culling
 
     Vertex *vertCache = new Vertex[verticesCnt];
     VertexProcessor *vertProcessor = new VertexProcessor;
     FragmentProcessor *fragProcessor = new FragmentProcessor;
-    Rasterizer *rasterizer = new Rasterizer(m_width, m_height);
+    Rasterizer rasterizer;
 
     vertProcessor->updateTransforms(*this);
     int triangleCnt = verticesCnt / 3;
@@ -146,13 +147,13 @@ void Renderer::renderTriangle(int verticesCnt,
                                 textures + i * 3,
                                 vertCache + i * 3);
     }
+    rasterizer.setupTexture(tex);
     for (int i = 0; i < triangleCnt; i = i + 1) {
-        rasterizer->triangle(vertCache + i * 3, fragProcessor, frameBuffer);
+        rasterizer.triangle(vertCache + i * 3, fragProcessor, frameBuffer);
     }
 
     delete fragProcessor;
     delete vertProcessor;
-    delete rasterizer;
     delete [] vertCache;
 }
 

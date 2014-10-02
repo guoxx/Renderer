@@ -8,6 +8,9 @@ typedef struct Vertex {
     Vec3f normal;
     Vec3f color;
     Vec3f vEye;
+    struct {
+        float u, v;
+    } texCoords;
 } Vertex;
 
 #endif /* defined(__RENDERER__VERTEX__) */

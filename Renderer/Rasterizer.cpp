@@ -168,8 +168,24 @@ void Rasterizer::triangle(Vertex *vertices, FragmentProcessor *fp, FrameBuffer *
                 (void)z;
                 // TODO: handle depth buffer
 
-                Vec3f color = colorA + (colorB - colorA) * beta + (colorC - colorA) * gamma;
-                fbuffer->setColorBuffer(x, y, color);
+                if (_tex != NULL) {
+                    float h0 = a.vert.w;
+                    float h1 = b.vert.w;
+                    float h2 = c.vert.w;
+                    float denominator = h1*h2 + h2*beta*(h0-h1) + h1*gamma*(h0-h2);
+                    float beta_w = h0 * h2 * beta / denominator;
+                    float gamma_w = h0 * h1 * gamma / denominator;
+                    float alpha_w = 1.0f - beta_w - gamma_w;
+
+                    float u = a.texCoords.u * alpha_w + b.texCoords.u * beta_w + c.texCoords.u * gamma_w;
+                    float v = a.texCoords.v * alpha_w + b.texCoords.v * beta_w + c.texCoords.v * gamma_w;
+                    Vec3f color = _tex->getColor(u, v);
+                    fbuffer->setColorBuffer(x, y, color);
+                }
+                else {
+                    Vec3f color = colorA + (colorB - colorA) * beta + (colorC - colorA) * gamma;
+                    fbuffer->setColorBuffer(x, y, color);
+                }
             }
         }
     }

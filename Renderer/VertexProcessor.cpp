@@ -28,5 +28,9 @@ void VertexProcessor::triangle(Vec3f *v, Vec3f *n, Vec3f *c, Vec3f *t, Vertex *v
         (vert + i)->normal = *(n + i);
         (vert + i)->color = *(c + i);
         (vert + i)->vEye = m_mvMat * (*(v + i));
+        if (t != NULL) {
+            (vert + i)->texCoords.u = (t + i)->x;
+            (vert + i)->texCoords.v = (t + i)->y;
+        }
     }
 }
