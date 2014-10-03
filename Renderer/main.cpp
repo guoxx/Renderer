@@ -51,23 +51,58 @@ void scene0(Renderer *render) {
     }
 
     {
-        Vec3f v[2];
+        Vec3f v[3] = {
+            Vec3f(0, 2, 0), Vec3f(1, 0, 0), Vec3f(2, 2, 0)
+        };
+
         Vec3f c[3] = {
             Vec3f(1, 0, 0), Vec3f(0, 1, 0), Vec3f(0, 0, 1)
         };
-        v[0] = Vec3f(1, 0, 0);
-        v[1] = Vec3f(0, 2, 0);
-        render->renderLine(2, v, c);
-        v[0] = Vec3f(0, 2, 0);
-        v[1] = Vec3f(-1, 0, 0);
-        render->renderLine(2, v, c);
-        v[0] = Vec3f(1, 0, 0);
-        v[1] =  Vec3f(-1, 0, 0);
-        render->renderLine(2, v, c);
-        v[0] = Vec3f(1, 0, -3);
-        v[1] =  Vec3f(-1, 0, 0);
-        render->renderLine(2, v, c + 1);
+        
+        Vec3f n[3] = {
+            Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)
+        };
+        
+        Vec3f t[3] = {
+            Vec3f(0, 1, 0), Vec3f(1, 0, 0), Vec3f(1, 1, 0)
+        };
+        
+        //        Vec3f v2[3] = {
+        //            Vec3f(0, 2, 0), Vec3f(1, 0, 0), Vec3f(-1, 0, 0)
+        //        };
+        //
+        //        Vec3f c2[3] = {
+        //            Vec3f(0.25f, 0.75f, 0.25f), Vec3f(0.75f, 0.25f, 0.25f), Vec3f(0.25f, 0.25f, 0.75f)
+        //        };
+        //
+        //        Vec3f n2[3] = {
+        //            Vec3f(0, 0, -1), Vec3f(0, 0, -1), Vec3f(0, 0, -1)
+        //        };
+        
+        Texture *tex = new Texture();
+        const char *tgaFile = "/Users/ben/Downloads/aaa.tga";
+        tex->loadTga(*tgaFile);
+        render->renderTriangle(3, v, c, n, t, tex);
     }
+
+//    {
+//        Vec3f v[2];
+//        Vec3f c[3] = {
+//            Vec3f(1, 0, 0), Vec3f(0, 1, 0), Vec3f(0, 0, 1)
+//        };
+//        v[0] = Vec3f(1, 0, 0);
+//        v[1] = Vec3f(0, 2, 0);
+//        render->renderLine(2, v, c);
+//        v[0] = Vec3f(0, 2, 0);
+//        v[1] = Vec3f(-1, 0, 0);
+//        render->renderLine(2, v, c);
+//        v[0] = Vec3f(1, 0, 0);
+//        v[1] =  Vec3f(-1, 0, 0);
+//        render->renderLine(2, v, c);
+//        v[0] = Vec3f(1, 0, -3);
+//        v[1] =  Vec3f(-1, 0, 0);
+//        render->renderLine(2, v, c + 1);
+//    }
 
 //    render->renderTriangle(3, v2, c2, n2, NULL);
 }
