@@ -8,82 +8,55 @@
 #include "utMath.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include "Scene/SceneMesh.h"
 
 GLuint texId = 0;
 int screenWidth = 512;
 int screenHeight = 512;
 
 void scene0(Renderer *render) {
-
     {
-        Vec3f v[3] = {
-            Vec3f(-1, 0, 0), Vec3f(1, 0, 0), Vec3f(0, 2, 0)
-        };
-        
-        Vec3f c[3] = {
-            Vec3f(1, 0, 0), Vec3f(0, 1, 0), Vec3f(0, 0, 1)
-        };
-        
-        Vec3f n[3] = {
-            Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)
-        };
-        
-        Vec3f t[3] = {
-            Vec3f(0, 0, 0), Vec3f(1, 0, 0), Vec3f(0, 1, 0)
-        };
-        
-//        Vec3f v2[3] = {
-//            Vec3f(0, 2, 0), Vec3f(1, 0, 0), Vec3f(-1, 0, 0)
-//        };
-//        
-//        Vec3f c2[3] = {
-//            Vec3f(0.25f, 0.75f, 0.25f), Vec3f(0.75f, 0.25f, 0.25f), Vec3f(0.25f, 0.25f, 0.75f)
-//        };
-//        
-//        Vec3f n2[3] = {
-//            Vec3f(0, 0, -1), Vec3f(0, 0, -1), Vec3f(0, 0, -1)
-//        };
-        
-        Texture *tex = new Texture();
-        const char *tgaFile = "/Users/ben/Downloads/aaa.tga";
-        tex->loadTga(*tgaFile);
-        render->renderTriangle(3, v, c, n, t, tex);
+        std::shared_ptr<SceneMesh> scene = std::make_shared<SceneMesh>();
+        const char *file = "/Users/ben/Downloads/bunny500.msh";
+        scene->load(*file);
+        scene->render(*render);
+        scene = nullptr;
     }
 
-    {
-        Vec3f v[3] = {
-            Vec3f(0, 2, 0), Vec3f(1, 0, 0), Vec3f(2, 2, 0)
-        };
-
-        Vec3f c[3] = {
-            Vec3f(1, 0, 0), Vec3f(0, 1, 0), Vec3f(0, 0, 1)
-        };
-        
-        Vec3f n[3] = {
-            Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)
-        };
-        
-        Vec3f t[3] = {
-            Vec3f(0, 1, 0), Vec3f(1, 0, 0), Vec3f(1, 1, 0)
-        };
-        
-        //        Vec3f v2[3] = {
-        //            Vec3f(0, 2, 0), Vec3f(1, 0, 0), Vec3f(-1, 0, 0)
-        //        };
-        //
-        //        Vec3f c2[3] = {
-        //            Vec3f(0.25f, 0.75f, 0.25f), Vec3f(0.75f, 0.25f, 0.25f), Vec3f(0.25f, 0.25f, 0.75f)
-        //        };
-        //
-        //        Vec3f n2[3] = {
-        //            Vec3f(0, 0, -1), Vec3f(0, 0, -1), Vec3f(0, 0, -1)
-        //        };
-        
-        Texture *tex = new Texture();
-        const char *tgaFile = "/Users/ben/Downloads/aaa.tga";
-        tex->loadTga(*tgaFile);
-        render->renderTriangle(3, v, c, n, t, tex);
-    }
+//    {
+//        Vec3f v[3] = {
+//            Vec3f(-1, 0, 0), Vec3f(1, 0, 0), Vec3f(0, 2, 0)
+//        };
+//        
+//        Vec3f c[3] = {
+//            Vec3f(1, 0, 0), Vec3f(0, 1, 0), Vec3f(0, 0, 1)
+//        };
+//        
+//        Vec3f n[3] = {
+//            Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)
+//        };
+//        
+//        Vec3f t[3] = {
+//            Vec3f(0, 0, 0), Vec3f(1, 0, 0), Vec3f(0, 1, 0)
+//        };
+//        
+////        Vec3f v2[3] = {
+////            Vec3f(0, 2, 0), Vec3f(1, 0, 0), Vec3f(-1, 0, 0)
+////        };
+////        
+////        Vec3f c2[3] = {
+////            Vec3f(0.25f, 0.75f, 0.25f), Vec3f(0.75f, 0.25f, 0.25f), Vec3f(0.25f, 0.25f, 0.75f)
+////        };
+////        
+////        Vec3f n2[3] = {
+////            Vec3f(0, 0, -1), Vec3f(0, 0, -1), Vec3f(0, 0, -1)
+////        };
+//        
+//        Texture *tex = new Texture();
+//        const char *tgaFile = "/Users/ben/Downloads/aaa.tga";
+//        tex->loadTga(*tgaFile);
+//        render->renderTriangle(3, v, c, n, t, tex);
+//    }
 
 //    {
 //        Vec3f v[2];
