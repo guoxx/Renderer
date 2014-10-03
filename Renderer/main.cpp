@@ -190,13 +190,13 @@ int main(int argc, char **argv) {
         return -1;
     }
 
+    reshape(window, screenWidth, screenHeight);
+
     glfwSetKeyCallback(window, _keyPressListener);
     glfwSetCursorPosCallback(window, _mouseMoveListener);
 
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
-
-    reshape(window, screenWidth, screenHeight);
 
     glGenTextures(1, &texId);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
