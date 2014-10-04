@@ -113,7 +113,22 @@ bool SceneMesh::load(const char &file){
     return true;
 }
 
+void SceneMesh::setup(Renderer &renderer) {
+    Vec3f eye = Vec3f(3.0f, 4.0f, 5.0f);
+    Vec3f target = Vec3f(0.0f, 0.0f, 0.0f);
+    Vec3f up = Vec3f(0.0f, 1.0f, 0.0f);
+    renderer.lookat(eye, target, up);
+    renderer.viewport(0, 0, renderer.getWidth(), renderer.getHeight());
+    renderer.setupViewParams(90.0f, 1.0f, 1.0f, 10.0f);
+}
+
+void SceneMesh::update(Renderer &renderer) {
+
+}
+
 void SceneMesh::render(Renderer &renderer){
+    renderer.clearColorBuffer(Vec3f(0, 0, 0));
+
     for (int i = 0; i < _polyCnt * 3; i = i + 3) {
         int iv0 = 3 * _triangles[i + 0];
         int iv1 = 3 * _triangles[i + 1];

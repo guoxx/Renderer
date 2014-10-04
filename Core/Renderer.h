@@ -25,6 +25,8 @@ public:
         delete frameBuffer;
     }
 
+    int getWidth() { return m_width; }
+    int getHeight() { return m_height; }
     Matrix4f& getModelViewMatrix() { return m_modelviewMat; }
     Matrix4f& getProjectionMatrix() { return m_projectionMat; }
     Matrix4f& getViewportMatrix() { return m_viewportMat; }

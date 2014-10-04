@@ -15,7 +15,9 @@ public:
     }
 
     virtual bool load(const char &file) = 0;
-    virtual void render(Renderer &rd) = 0;
+    virtual void setup(Renderer &renderer) = 0;
+    virtual void update(Renderer &renderer) = 0;
+    virtual void render(Renderer &renderer) = 0;
 
 private:
 };

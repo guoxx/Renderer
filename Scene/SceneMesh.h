@@ -10,7 +10,9 @@ public:
     virtual ~SceneMesh();
 
     bool load(const char &file);
-    void render(Renderer &rd);
+    void setup(Renderer &renderer);
+    void update(Renderer &renderer);
+    void render(Renderer &renderer);
 
 private:
     int _pointCnt;

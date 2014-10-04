@@ -14,91 +14,32 @@ GLuint texId = 0;
 int screenWidth = 512;
 int screenHeight = 512;
 
-void scene0(Renderer *render) {
-    {
-        std::shared_ptr<SceneMesh> scene = std::make_shared<SceneMesh>();
-        const char *file = "../../Resources/bunny500.msh";
-        scene->load(*file);
-        scene->render(*render);
-        scene = nullptr;
-    }
+static bool _initialized = false;
+std::shared_ptr<Renderer> renderer;
+std::shared_ptr<Scene> scene;
 
-//    {
-//        Vec3f v[3] = {
-//            Vec3f(-1, 0, 0), Vec3f(1, 0, 0), Vec3f(0, 2, 0)
-//        };
-//        
-//        Vec3f c[3] = {
-//            Vec3f(1, 0, 0), Vec3f(0, 1, 0), Vec3f(0, 0, 1)
-//        };
-//        
-//        Vec3f n[3] = {
-//            Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)
-//        };
-//        
-//        Vec3f t[3] = {
-//            Vec3f(0, 0, 0), Vec3f(1, 0, 0), Vec3f(0, 1, 0)
-//        };
-//        
-////        Vec3f v2[3] = {
-////            Vec3f(0, 2, 0), Vec3f(1, 0, 0), Vec3f(-1, 0, 0)
-////        };
-////        
-////        Vec3f c2[3] = {
-////            Vec3f(0.25f, 0.75f, 0.25f), Vec3f(0.75f, 0.25f, 0.25f), Vec3f(0.25f, 0.25f, 0.75f)
-////        };
-////        
-////        Vec3f n2[3] = {
-////            Vec3f(0, 0, -1), Vec3f(0, 0, -1), Vec3f(0, 0, -1)
-////        };
-//        
-//        Texture *tex = new Texture();
-//        const char *tgaFile = "../../Resources/aaa.tga";
-//        tex->loadTga(*tgaFile);
-//        render->renderTriangle(3, v, c, n, t, tex);
-//    }
+void _initializeEnv() {
+    if (_initialized)
+        return;
 
-//    {
-//        Vec3f v[2];
-//        Vec3f c[3] = {
-//            Vec3f(1, 0, 0), Vec3f(0, 1, 0), Vec3f(0, 0, 1)
-//        };
-//        v[0] = Vec3f(1, 0, 0);
-//        v[1] = Vec3f(0, 2, 0);
-//        render->renderLine(2, v, c);
-//        v[0] = Vec3f(0, 2, 0);
-//        v[1] = Vec3f(-1, 0, 0);
-//        render->renderLine(2, v, c);
-//        v[0] = Vec3f(1, 0, 0);
-//        v[1] =  Vec3f(-1, 0, 0);
-//        render->renderLine(2, v, c);
-//        v[0] = Vec3f(1, 0, -3);
-//        v[1] =  Vec3f(-1, 0, 0);
-//        render->renderLine(2, v, c + 1);
-//    }
+    renderer = std::make_shared<Renderer>(screenWidth, screenHeight);
+    scene = std::make_shared<SceneMesh>();
+    const char *file = "../../Resources/bunny500.msh";
+    scene->load(*file);
+    scene->setup(*renderer);
+}
 
-//    render->renderTriangle(3, v2, c2, n2, NULL);
+void _finalizeEnv() {
+    scene = nullptr;
+    renderer = nullptr;
 }
 
 void redraw() {
-    static Renderer* render = NULL;
-    if (render == NULL) {
-        render = new Renderer(screenWidth, screenHeight);
-    }
-
-    Vec3f eye = Vec3f(3.0f, 4.0f, 5.0f);
-    Vec3f target = Vec3f(0.0f, 0.0f, 0.0f);
-    Vec3f up = Vec3f(0.0f, 1.0f, 0.0f);
-    render->lookat(eye, target, up);
-    render->viewport(0, 0, screenWidth, screenHeight);
-    render->setupViewParams(90.0f, 1.0f, 1.0f, 10.0f);
-
-    Vec3f clearColor(0, 0, 0);
-    render->clearColorBuffer(clearColor);
-    scene0(render);
+    scene->update(*renderer);
+    scene->render(*renderer);
 
     uint8_t *data;
-    render->dumpRaw(&data, NULL);
+    renderer->dumpRaw(&data, NULL);
 
     glBindTexture(GL_TEXTURE_2D, texId);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, screenWidth, screenHeight, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
@@ -142,8 +83,7 @@ void reshape(GLFWwindow* window, int w, int h) {
     glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
 }
 
-static void _keyPressListener(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
+static void _keyPressListener(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
@@ -152,8 +92,8 @@ static void _mouseMoveListener(GLFWwindow *window, double x, double y) {
     
 }
 
-int main(int argc, char **argv) {
-	if (!glfwInit()) {
+int _main(int argc, char **argv) {
+    if (!glfwInit()) {
         return -1;
     }
 
@@ -187,4 +127,11 @@ int main(int argc, char **argv) {
 
     glfwTerminate();
     return 0;
+}
+
+int main(int argc, char **argv) {
+    _initializeEnv();
+    int ret = _main(argc, argv);
+    _finalizeEnv();
+    return ret;
 }
