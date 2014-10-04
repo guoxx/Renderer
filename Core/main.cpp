@@ -17,7 +17,7 @@ int screenHeight = 512;
 void scene0(Renderer *render) {
     {
         std::shared_ptr<SceneMesh> scene = std::make_shared<SceneMesh>();
-        const char *file = "/Users/ben/Downloads/bunny500.msh";
+        const char *file = "../../Resources/bunny500.msh";
         scene->load(*file);
         scene->render(*render);
         scene = nullptr;
@@ -53,7 +53,7 @@ void scene0(Renderer *render) {
 ////        };
 //        
 //        Texture *tex = new Texture();
-//        const char *tgaFile = "/Users/ben/Downloads/aaa.tga";
+//        const char *tgaFile = "../../Resources/aaa.tga";
 //        tex->loadTga(*tgaFile);
 //        render->renderTriangle(3, v, c, n, t, tex);
 //    }
