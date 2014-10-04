@@ -24,6 +24,7 @@ static char *_readline(struct FReader *reader, char *buf) {
             break;
         }
 
+        // \r\n
         if (buf[idx] != '\n') {
             idx = idx + 1;
         }
@@ -142,6 +143,6 @@ void SceneMesh::render(Renderer &renderer){
             Vec3f(_texcoords[_triangles[i + 2] * 2], _texcoords[_triangles[i + 2] * 2 + 1], 0)
         };
 
-        renderer.renderTriangle(3, v, c, n, t, NULL);
+        renderer.renderTriangle(3, v, c, n, t, nullptr);
     }
 }
