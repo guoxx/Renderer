@@ -1,6 +1,6 @@
 #include "SceneMesh.h"
 #include "Renderer.h"
-#include "../utMath.h"
+#include "utMath.h"
 
 #include <cstdio>
 #include <cerrno>

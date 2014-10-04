@@ -8,7 +8,7 @@
 #include "utMath.h"
 #include "Renderer.h"
 #include "Texture.h"
-#include "Scene/SceneMesh.h"
+#include "SceneMesh.h"
 
 GLuint texId = 0;
 int screenWidth = 512;
