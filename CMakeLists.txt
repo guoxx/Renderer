@@ -38,6 +38,16 @@ file(GLOB_RECURSE CORE_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/Core/*.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Core/*.h)
+file(GLOB_RECURSE VERTEX_SRCS
+        RELATIVE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/Vertex/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Vertex/*.h)
+file(GLOB_RECURSE FRAGMENT_SRCS
+        RELATIVE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/Fragment/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Fragment/*.h)
 file(GLOB_RECURSE SCENE_SRCS
         RELATIVE
         ${CMAKE_CURRENT_SOURCE_DIR}
@@ -46,6 +56,8 @@ file(GLOB_RECURSE SCENE_SRCS
 
 source_group(Util FILES ${UTIL_SRCS})
 source_group(Core FILES ${CORE_SRCS})
+source_group(Vertex FILES ${VERTEX_SRCS})
+source_group(Fragment FILES ${FRAGMENT_SRCS})
 source_group(Scene FILES ${SCENE_SRCS})
 
 # CMAKE_BINARY_DIR is used for inclusion of automatically generated files
@@ -53,6 +65,8 @@ include_directories(
         /usr/local/include
         ${CMAKE_CURRENT_SOURCE_DIR}/Util
         ${CMAKE_CURRENT_SOURCE_DIR}/Core
+        ${CMAKE_CURRENT_SOURCE_DIR}/Vertex
+        ${CMAKE_CURRENT_SOURCE_DIR}/Fragment
         ${CMAKE_CURRENT_SOURCE_DIR}/Scene
         ${CMAKE_BINARY_DIR}
     )
@@ -60,6 +74,8 @@ include_directories(
 add_executable(renderer
         ${UTIL_SRCS}
         ${CORE_SRCS}
+        ${VERTEX_SRCS}
+        ${FRAGMENT_SRCS}
         ${SCENE_SRCS}
     )
 

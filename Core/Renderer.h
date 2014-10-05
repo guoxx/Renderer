@@ -12,6 +12,8 @@
 
 
 class Texture;
+class VertexProcessor;
+class FragmentProcessor;
 
 class Renderer {
 public:
@@ -36,7 +38,9 @@ public:
     void setupViewParams(float fov, float aspect, float zNear, float zFar);
     
     void viewport(int x, int y, int w, int h);
-    
+
+    void setupPipeline(std::shared_ptr<VertexProcessor> vp, std::shared_ptr<FragmentProcessor> fp);
+
     void clearColorBuffer(const Vec3f &color);
     
     void renderLine(int lineCnt,
@@ -61,6 +65,8 @@ private:
     Matrix4f _viewportMat;
 
     std::shared_ptr<FrameBuffer> _frameBuffer;
+    std::shared_ptr<VertexProcessor> _vp;
+    std::shared_ptr<FragmentProcessor> _fp;
 };
 
 #endif

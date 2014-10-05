@@ -6,7 +6,7 @@ class FrameBuffer;
 
 class FragmentProcessor {
 public:
-    void fragment(Fragment &frag, FrameBuffer &framebuffer);
+    virtual void fragment(Fragment &frag, FrameBuffer &framebuffer) = 0;
 };
 
 #endif

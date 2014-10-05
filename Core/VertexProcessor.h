@@ -8,11 +8,11 @@ class Renderer;
 
 class VertexProcessor {
 public:
-    void updateTransforms(Renderer &renderer);
-    void line(Vec3f *v, Vec3f *c, Vertex *vert);
-    void triangle(Vec3f *v, Vec3f *n, Vec3f *c, Vec3f *t, Vertex *vert);
+    virtual void updateTransforms(Renderer &renderer) = 0;
+    virtual void line(Vec3f *v, Vec3f *c, Vertex *vert) = 0;
+    virtual void triangle(Vec3f *v, Vec3f *n, Vec3f *c, Vec3f *t, Vertex *vert) = 0;
 
-private:
+protected:
     Matrix4f _mvpMat;
     Matrix4f _mvMat;
     Matrix4f _vpMat;

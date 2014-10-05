@@ -9,6 +9,8 @@
 #include "Renderer.h"
 #include "Texture.h"
 #include "SceneMesh.h"
+#include "ConstColorVP.h"
+#include "TrivialColorFP.h"
 
 GLuint texId = 0;
 int screenWidth = 512;
@@ -23,6 +25,7 @@ void _initializeEnv() {
         return;
 
     renderer = std::make_shared<Renderer>(screenWidth, screenHeight);
+    renderer->setupPipeline(std::make_shared<ConstColorVP>(), std::make_shared<TrivialColorFP>());
     scene = std::make_shared<SceneMesh>();
     const char *file = "../../Resources/bunny500.msh";
     scene->load(*file);
