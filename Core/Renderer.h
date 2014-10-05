@@ -6,6 +6,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstring>
+#include <memory>
 #include "utMath.h"
 #include "FrameBuffer.h"
 
@@ -14,15 +15,14 @@ class Texture;
 
 class Renderer {
 public:
-    Renderer(int w, int h) {
-        m_width = w;
-        m_height = h;
-        
-        frameBuffer = new FrameBuffer(m_width, m_height);
+    Renderer(int w, int h)
+    : m_width(w)
+    , m_height(h){
+        frameBuffer = std::make_shared<FrameBuffer>(m_width, m_height);
     }
 
     ~Renderer() {
-        delete frameBuffer;
+        frameBuffer = nullptr;
     }
 
     int getWidth() { return m_width; }
@@ -48,7 +48,7 @@ public:
                         Vec3f *colors,
                         Vec3f *normals,
                         Vec3f *textures,
-                        Texture *tex);
+                        std::shared_ptr<Texture> tex);
 
     void dumpRaw(uint8_t **data, int *sz);
 
@@ -59,8 +59,8 @@ private:
     Matrix4f m_modelviewMat;
     Matrix4f m_projectionMat;
     Matrix4f m_viewportMat;
-    
-    FrameBuffer *frameBuffer;
+
+    std::shared_ptr<FrameBuffer> frameBuffer;
 };
 
 #endif

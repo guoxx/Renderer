@@ -6,7 +6,7 @@ class FrameBuffer;
 
 class FragmentProcessor {
 public:
-    void fragment(Fragment *frag, FrameBuffer *fb);
+    void fragment(Fragment &frag, FrameBuffer &framebuffer);
 };
 
 #endif

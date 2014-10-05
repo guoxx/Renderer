@@ -18,8 +18,6 @@ public:
     virtual void setup(Renderer &renderer) = 0;
     virtual void update(Renderer &renderer) = 0;
     virtual void render(Renderer &renderer) = 0;
-
-private:
 };
 
 #endif /* defined(__RENDERER__SCENE__) */

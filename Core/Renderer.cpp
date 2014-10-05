@@ -21,16 +21,6 @@ static uint32_t _color3ToUInt(const Vec3f& color){
     return c;
 }
 
-static uint32_t _color4ToUInt(const Vec4f& color){
-    uint32_t c;
-    uint8_t* p = (uint8_t*)&c;
-    *p = uint8_t(std::fmin(color.x, 1.0f) * 255);
-    *(p + 1) = uint8_t(std::fmin(color.y, 1.0f) * 255);
-    *(p + 2) = uint8_t(std::fmin(color.z, 1.0f) * 255);
-    *(p + 3) = uint8_t(std::fmin(color.w, 1.0f) * 255);
-    return c;
-}
-
 #pragma mark ----
 
 void Renderer::lookat(Vec3f& eye, Vec3f& target, Vec3f& up){
@@ -119,7 +109,7 @@ void Renderer::renderLine(int verticesCnt,
                            vertCache + i * 2);
     }
     for (int i = 0; i < lineCnt; i = i + 1) {
-        rasterizer.lineSegment(vertCache + i * 2, fragProcessor, *frameBuffer);
+        rasterizer.line(vertCache + i * 2, fragProcessor, *frameBuffer);
     }
 
     delete [] vertCache;
@@ -130,30 +120,28 @@ void Renderer::renderTriangle(int verticesCnt,
                               Vec3f *colors,
                               Vec3f *normals,
                               Vec3f *textures,
-                              Texture *tex) {
+                              std::shared_ptr<Texture> tex) {
     // TODO: face culling
 
     Vertex *vertCache = new Vertex[verticesCnt];
-    VertexProcessor *vertProcessor = new VertexProcessor;
-    FragmentProcessor *fragProcessor = new FragmentProcessor;
+    VertexProcessor vertProcessor;
+    FragmentProcessor fragProcessor;
     Rasterizer rasterizer;
 
-    vertProcessor->updateTransforms(*this);
+    vertProcessor.updateTransforms(*this);
     int triangleCnt = verticesCnt / 3;
     for (int i = 0; i < triangleCnt; i = i + 1) {
-        vertProcessor->triangle(vertices + i * 3,
-                                normals + i * 3,
-                                colors + i * 3,
-                                textures + i * 3,
-                                vertCache + i * 3);
+        vertProcessor.triangle(vertices + i * 3,
+                               normals + i * 3,
+                               colors + i * 3,
+                               textures + i * 3,
+                               vertCache + i * 3);
     }
     rasterizer.setupTexture(tex);
     for (int i = 0; i < triangleCnt; i = i + 1) {
-        rasterizer.triangle(vertCache + i * 3, fragProcessor, frameBuffer);
+        rasterizer.triangle(vertCache + i * 3, fragProcessor, *frameBuffer);
     }
 
-    delete fragProcessor;
-    delete vertProcessor;
     delete [] vertCache;
 }
 

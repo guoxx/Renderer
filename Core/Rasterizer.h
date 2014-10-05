@@ -2,6 +2,7 @@
 #define __RASTERIZER_H__
 
 #include <cassert>
+#include <memory>
 #include "Texture.h"
 
 struct Vertex;
@@ -17,24 +18,19 @@ public:
     }
 
     ~Rasterizer() {
-        if (_tex) {
-            delete _tex;
-            _tex = nullptr;
-        }
+        _tex = nullptr;
     }
 
-    void setupTexture(Texture *t) {
-        if (_tex != nullptr) {
-            delete _tex;
-        }
+    void setupTexture(std::shared_ptr<Texture> t) {
         _tex = t;
     }
-    
-    void lineSegment(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &fb);
-    void triangle(Vertex *vertices, FragmentProcessor *fp, FrameBuffer *fbuffer);
+
+    void line(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &framebuffer);
+    void triangle(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &framebuffer);
 
 private:
-    Texture *_tex;
+
+    std::shared_ptr<Texture> _tex;
 };
 
 #endif

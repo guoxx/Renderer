@@ -11,7 +11,7 @@ public:
     void updateTransforms(Renderer &renderer);
     void line(Vec3f *v, Vec3f *c, Vertex *vert);
     void triangle(Vec3f *v, Vec3f *n, Vec3f *c, Vec3f *t, Vertex *vert);
-    
+
 private:
     Matrix4f m_mvpMat;
     Matrix4f m_mvMat;

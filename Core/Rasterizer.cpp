@@ -3,8 +3,7 @@
 #include "FrameBuffer.h"
 #include "Vertex.h"
 
-void Rasterizer::lineSegment(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &fb)
-{
+void Rasterizer::line(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &framebuffer) {
     Vec3f p[2];
     Vec3f cl[2];
 
@@ -36,102 +35,84 @@ void Rasterizer::lineSegment(Vertex *vertices, FragmentProcessor &fp, FrameBuffe
 
     int a = int(y1 - y0);
     int b = int(x0 - x1);
-    int c = int(x1 * y0 - x0 * y1);
     Vec3f color = cl[i0];
     assert(b <= 0);
-    if (a <= b)
-    {
+    if (a <= b) {
         // (-inf, -1]
         int x = x0;
         float d = f(x0 + 0.5f, y0 - 1);
-        for (int y = y0; y >= y1; y = y - 1)
-        {
+        for (int y = y0; y >= y1; y = y - 1) {
             color = color + deltaColor;
-            fb.setColorBuffer(x, y, color);
+            framebuffer.setColorBuffer(x, y, color);
 
-            if (d >= 0)
-            {
+            if (d >= 0) {
                 x = x + 1;
                 d = d + a - b;
             }
-            else
-            {
+            else {
                 d = d - b;
             }
         }
     }
-    else if (b < a && a <= 0)
-    {
+    else if (b < a && a <= 0) {
         // (-1, 0]
         int y = y0;
         float d = f(x0 + 1, y0 - 0.5f);
-        for (int x = x0; x <= x1; x = x + 1)
-        {
+        for (int x = x0; x <= x1; x = x + 1) {
             color = color + deltaColor;
-            fb.setColorBuffer(x, y, color);
+            framebuffer.setColorBuffer(x, y, color);
             
-            if (d <= 0)
-            {
+            if (d <= 0) {
                 y = y - 1;
                 d = d + a - b;
             }
-            else
-            {
+            else {
                 d = d + a;
             }
         }
     }
-    else if (0 < a && a <= -b)
-    {
+    else if (0 < a && a <= -b) {
         // (0, 1]
         int y = y0;
         float d = f(x0 + 1, y0 + 0.5f);
-        for (int x = x0; x <= x1; x = x + 1)
-        {
+        for (int x = x0; x <= x1; x = x + 1) {
             color = color + deltaColor;
-            fb.setColorBuffer(x, y, color);
+            framebuffer.setColorBuffer(x, y, color);
             
-            if (d >= 0)
-            {
+            if (d >= 0) {
                 y = y + 1;
                 d = d + a + b;
             }
-            else
-            {
+            else {
                 d = d + a;
             }
         }
     }
-    else if (-b < a)
-    {
+    else if (-b < a) {
         // (1, +inf)
         int x = x0;
         float d = f(x0 + 0.5f, y0 + 1);
-        for (int y = y0; y <= y1; y = y + 1)
-        {
+        for (int y = y0; y <= y1; y = y + 1) {
             color = color + deltaColor;
-            fb.setColorBuffer(x, y, color);
+            framebuffer.setColorBuffer(x, y, color);
             
-            if (d <= 0)
-            {
+            if (d <= 0) {
                 x = x + 1;
                 d = d + a + b;
             }
-            else
-            {
+            else {
                 d = d + b;
             }
         }
     }
-    else
-    {
+    else {
         assert(0);
     }
     
     #undef f
 }
 
-void Rasterizer::triangle(Vertex *vertices, FragmentProcessor *fp, FrameBuffer *fbuffer){
+void Rasterizer::triangle(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &framebuffer) {
     Vertex &a = *vertices;
     Vertex &b = *(vertices + 1);
     Vertex &c = *(vertices + 2);
@@ -177,14 +158,14 @@ void Rasterizer::triangle(Vertex *vertices, FragmentProcessor *fp, FrameBuffer *
                     float gamma_w = h0 * h1 * gamma / denominator;
                     float alpha_w = 1.0f - beta_w - gamma_w;
 
-                    float u = a.texCoords.u * alpha_w + b.texCoords.u * beta_w + c.texCoords.u * gamma_w;
-                    float v = a.texCoords.v * alpha_w + b.texCoords.v * beta_w + c.texCoords.v * gamma_w;
+                    float u = a.texCoord.x * alpha_w + b.texCoord.x * beta_w + c.texCoord.x * gamma_w;
+                    float v = a.texCoord.y * alpha_w + b.texCoord.y * beta_w + c.texCoord.y * gamma_w;
                     Vec3f color = _tex->getColor(u, v);
-                    fbuffer->setColorBuffer(x, y, color);
+                    framebuffer.setColorBuffer(x, y, color);
                 }
                 else {
                     Vec3f color = colorA + (colorB - colorA) * beta + (colorC - colorA) * gamma;
-                    fbuffer->setColorBuffer(x, y, color);
+                    framebuffer.setColorBuffer(x, y, color);
                 }
             }
         }

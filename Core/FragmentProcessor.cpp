@@ -2,6 +2,6 @@
 #include "Fragment.h"
 #include "FrameBuffer.h"
 
-void FragmentProcessor::fragment(Fragment *frag, FrameBuffer *fb){
-    fb->setColorBuffer(frag->x, frag->y, frag->color);
+void FragmentProcessor::fragment(Fragment &frag, FrameBuffer &framebuffer){
+    framebuffer.setColorBuffer(frag.x, frag.y, frag.color);
 }
