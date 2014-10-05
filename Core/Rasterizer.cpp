@@ -4,6 +4,7 @@
 #include "Vertex.h"
 
 void Rasterizer::line(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &framebuffer) {
+    // TODO: perspective correct z and color interpolation
     Vec3f p[2];
     Vec3f cl[2];
 
@@ -25,11 +26,12 @@ void Rasterizer::line(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &fram
 
     int x0 = p[i0].x;
     int y0 = p[i0].y;
-    int z0 = p[i0].z;
+    float z0 = p[i0].z;
     int x1 = p[i1].x;
     int y1 = p[i1].y;
-    int z1 = p[i1].z;
-    Vec3f deltaColor = (cl[i1] - cl[i0]) / (p[i0] - p[i1]).length();
+    float z1 = p[i1].z;
+    float len = (p[i0] - p[i1]).length();
+    Vec3f deltaColor = (cl[i1] - cl[i0]) / len;
 
     #define f(x,y) (y1 - y0)*(x) + (x0 - x1)*(y) + (x1*y0 - x0*y1)
 
@@ -146,8 +148,9 @@ void Rasterizer::triangle(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &
             float gamma = f(pb, pa, x, y) / fg;
             if (alpha > 0 && beta > 0 && gamma > 0) {
                 float z = pa.z + beta * (pb.z - pa.z) + gamma * (pc.z - pa.z);
-                (void)z;
-                // TODO: handle depth buffer
+                float zval = framebuffer.getDepthBuffer(x, y);
+                if (z > zval)
+                    continue;
 
                 if (_tex != NULL) {
                     float h0 = a.vert.w;
@@ -162,10 +165,12 @@ void Rasterizer::triangle(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &
                     float v = a.texCoord.y * alpha_w + b.texCoord.y * beta_w + c.texCoord.y * gamma_w;
                     Vec3f color = _tex->getColor(u, v);
                     framebuffer.setColorBuffer(x, y, color);
+                    framebuffer.setDepthBuffer(x, y, z);
                 }
                 else {
                     Vec3f color = colorA + (colorB - colorA) * beta + (colorC - colorA) * gamma;
                     framebuffer.setColorBuffer(x, y, color);
+                    framebuffer.setDepthBuffer(x, y, z);
                 }
             }
         }

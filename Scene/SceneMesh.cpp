@@ -127,6 +127,7 @@ void SceneMesh::update(Renderer &renderer) {
 }
 
 void SceneMesh::render(Renderer &renderer){
+    renderer.clearDepthBuffer(10.0f);
     renderer.clearColorBuffer(Vec3f(0, 0, 0));
 
     for (int i = 0; i < _polyCnt * 3; i = i + 3) {

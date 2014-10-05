@@ -41,6 +41,8 @@ public:
 
     void setupPipeline(std::shared_ptr<VertexProcessor> vp, std::shared_ptr<FragmentProcessor> fp);
 
+    void clearDepthBuffer(float val);
+
     void clearColorBuffer(const Vec3f &color);
     
     void renderLine(int lineCnt,

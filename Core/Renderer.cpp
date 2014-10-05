@@ -85,11 +85,17 @@ void Renderer::setupPipeline(std::shared_ptr<VertexProcessor> vp, std::shared_pt
     _fp = fp;
 }
 
-void Renderer::clearColorBuffer(const Vec3f &color){
-    for (int x = 0; x < _width; x = x + 1)
-    {
-        for (int y = 0; y < _height; y = y + 1)
-        {
+void Renderer::clearDepthBuffer(float val) {
+    for (int x = 0; x < _width; x = x + 1) {
+        for (int y = 0; y < _height; y = y + 1) {
+            _frameBuffer->setDepthBuffer(x, y, val);
+        }
+    }
+}
+
+void Renderer::clearColorBuffer(const Vec3f &color) {
+    for (int x = 0; x < _width; x = x + 1) {
+        for (int y = 0; y < _height; y = y + 1) {
             _frameBuffer->setColorBuffer(x, y, color);
         }
     }
@@ -97,16 +103,14 @@ void Renderer::clearColorBuffer(const Vec3f &color){
 
 void Renderer::renderLine(int verticesCnt,
                           Vec3f *vertices,
-                          Vec3f *colors)
-{
+                          Vec3f *colors) {
     Vertex *vertCache = new Vertex[verticesCnt];
 
     Rasterizer rasterizer;
 
     _vp->updateTransforms(*this);
     int lineCnt = verticesCnt / 2;
-    for (int i = 0; i < lineCnt; i = i + 1)
-    {
+    for (int i = 0; i < lineCnt; i = i + 1) {
         _vp->line(vertices + i * 2, colors + i * 2, vertCache + i * 2);
     }
     for (int i = 0; i < lineCnt; i = i + 1) {
