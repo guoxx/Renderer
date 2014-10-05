@@ -7,38 +7,38 @@
 class FrameBuffer {
 public:
     FrameBuffer(int w, int h) {
-        width = w;
-        height = h;
-        colorBuffer = new Vec3f[width * height];
-        depthBuffer = new float[width * height];
+        _width = w;
+        _height = h;
+        _colorBuffer = new Vec3f[_width * _height];
+        _depthBuffer = new float[_width * _height];
     }
 
     ~FrameBuffer() {
-        delete [] colorBuffer;
-        delete [] depthBuffer;
+        delete [] _colorBuffer;
+        delete [] _depthBuffer;
     }
 
     void setColorBuffer(int x, int y, const Vec3f &val) {
-        colorBuffer[x + y * width] = val;
+        _colorBuffer[x + y * _width] = val;
     }
 
     Vec3f getColorBuffer(int x, int y) {
-        return colorBuffer[x + y * width];
+        return _colorBuffer[x + y * _width];
     }
 
     void setDepthBuffer(int x, int y, float val) {
-        depthBuffer[x + y * width] = val;
+        _depthBuffer[x + y * _width] = val;
     }
     
     float getDepthBuffer(int x, int y) {
-        return depthBuffer[x + y * width];
+        return _depthBuffer[x + y * _width];
     }
 
 private:
-    int width;
-    int height;
-    Vec3f *colorBuffer;
-    float *depthBuffer;
+    int _width;
+    int _height;
+    Vec3f *_colorBuffer;
+    float *_depthBuffer;
 };
 
 #endif /* defined(__RENDERER__FRAMEBUFFER__) */

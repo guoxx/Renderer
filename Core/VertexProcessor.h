@@ -13,9 +13,9 @@ public:
     void triangle(Vec3f *v, Vec3f *n, Vec3f *c, Vec3f *t, Vertex *vert);
 
 private:
-    Matrix4f m_mvpMat;
-    Matrix4f m_mvMat;
-    Matrix4f m_vpMat;
+    Matrix4f _mvpMat;
+    Matrix4f _mvMat;
+    Matrix4f _vpMat;
 };
 
 #endif

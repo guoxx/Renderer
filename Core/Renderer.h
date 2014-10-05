@@ -16,20 +16,20 @@ class Texture;
 class Renderer {
 public:
     Renderer(int w, int h)
-    : m_width(w)
-    , m_height(h){
-        frameBuffer = std::make_shared<FrameBuffer>(m_width, m_height);
+    : _width(w)
+    , _height(h){
+        _frameBuffer = std::make_shared<FrameBuffer>(_width, _height);
     }
 
     ~Renderer() {
-        frameBuffer = nullptr;
+        _frameBuffer = nullptr;
     }
 
-    int getWidth() { return m_width; }
-    int getHeight() { return m_height; }
-    Matrix4f& getModelViewMatrix() { return m_modelviewMat; }
-    Matrix4f& getProjectionMatrix() { return m_projectionMat; }
-    Matrix4f& getViewportMatrix() { return m_viewportMat; }
+    int getWidth() { return _width; }
+    int getHeight() { return _height; }
+    Matrix4f& getModelViewMatrix() { return _modelviewMat; }
+    Matrix4f& getProjectionMatrix() { return _projectionMat; }
+    Matrix4f& getViewportMatrix() { return _viewportMat; }
 
     void lookat(Vec3f& eye, Vec3f& target, Vec3f& up);
 
@@ -53,14 +53,14 @@ public:
     void dumpRaw(uint8_t **data, int *sz);
 
 private:
-    int m_width;
-    int m_height;
+    int _width;
+    int _height;
     
-    Matrix4f m_modelviewMat;
-    Matrix4f m_projectionMat;
-    Matrix4f m_viewportMat;
+    Matrix4f _modelviewMat;
+    Matrix4f _projectionMat;
+    Matrix4f _viewportMat;
 
-    std::shared_ptr<FrameBuffer> frameBuffer;
+    std::shared_ptr<FrameBuffer> _frameBuffer;
 };
 
 #endif

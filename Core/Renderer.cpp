@@ -33,7 +33,7 @@ void Renderer::lookat(Vec3f& eye, Vec3f& target, Vec3f& up){
     v.normalize();
 
     Matrix4f rotate;
-    m_modelviewMat.identity();
+    _modelviewMat.identity();
     rotate.c[0][0] = u.x;
     rotate.c[1][0] = u.y;
     rotate.c[2][0] = u.z;
@@ -49,7 +49,7 @@ void Renderer::lookat(Vec3f& eye, Vec3f& target, Vec3f& up){
     translate.c[3][1] = -eye.y;
     translate.c[3][2] = -eye.z;
 
-    m_modelviewMat = rotate * translate;
+    _modelviewMat = rotate * translate;
 }
 
 void Renderer::setupViewParams(float fov, float aspect, float zNear, float zFar){
@@ -59,33 +59,33 @@ void Renderer::setupViewParams(float fov, float aspect, float zNear, float zFar)
     float l = -r;
     float n = zNear;
     float f = zFar;
-    m_projectionMat.identity();
-    m_projectionMat.c[0][0] = (2 * n) / (r - l);
-    m_projectionMat.c[2][0] = (r + l) / (r - l);
-    m_projectionMat.c[1][1] = (2 * n) / (t - b);
-    m_projectionMat.c[3][1] = (t + b) / (t - b);
-    m_projectionMat.c[2][2] = (n + f) / (n - f);
-    m_projectionMat.c[3][2] = (2 * f * n) / (n - f);
-    m_projectionMat.c[2][3] = -1;
-    m_projectionMat.c[3][3] = 0;
+    _projectionMat.identity();
+    _projectionMat.c[0][0] = (2 * n) / (r - l);
+    _projectionMat.c[2][0] = (r + l) / (r - l);
+    _projectionMat.c[1][1] = (2 * n) / (t - b);
+    _projectionMat.c[3][1] = (t + b) / (t - b);
+    _projectionMat.c[2][2] = (n + f) / (n - f);
+    _projectionMat.c[3][2] = (2 * f * n) / (n - f);
+    _projectionMat.c[2][3] = -1;
+    _projectionMat.c[3][3] = 0;
 }
 
 void Renderer::viewport(int x, int y, int w, int h){
     int cx = x + w / 2;
     int cy = y + h / 2;
-    m_viewportMat.identity();
-    m_viewportMat.c[0][0] = w/2;
-    m_viewportMat.c[3][0] = cx;
-    m_viewportMat.c[1][1] = h/2;
-    m_viewportMat.c[3][1] = cy;
+    _viewportMat.identity();
+    _viewportMat.c[0][0] = w/2;
+    _viewportMat.c[3][0] = cx;
+    _viewportMat.c[1][1] = h/2;
+    _viewportMat.c[3][1] = cy;
 }
 
 void Renderer::clearColorBuffer(const Vec3f &color){
-    for (int x = 0; x < m_width; x = x + 1)
+    for (int x = 0; x < _width; x = x + 1)
     {
-        for (int y = 0; y < m_height; y = y + 1)
+        for (int y = 0; y < _height; y = y + 1)
         {
-            frameBuffer->setColorBuffer(x, y, color);
+            _frameBuffer->setColorBuffer(x, y, color);
         }
     }
 }
@@ -109,7 +109,7 @@ void Renderer::renderLine(int verticesCnt,
                            vertCache + i * 2);
     }
     for (int i = 0; i < lineCnt; i = i + 1) {
-        rasterizer.line(vertCache + i * 2, fragProcessor, *frameBuffer);
+        rasterizer.line(vertCache + i * 2, fragProcessor, *_frameBuffer);
     }
 
     delete [] vertCache;
@@ -139,7 +139,7 @@ void Renderer::renderTriangle(int verticesCnt,
     }
     rasterizer.setupTexture(tex);
     for (int i = 0; i < triangleCnt; i = i + 1) {
-        rasterizer.triangle(vertCache + i * 3, fragProcessor, *frameBuffer);
+        rasterizer.triangle(vertCache + i * 3, fragProcessor, *_frameBuffer);
     }
 
     delete [] vertCache;
@@ -148,12 +148,12 @@ void Renderer::renderTriangle(int verticesCnt,
 void Renderer::dumpRaw(uint8_t **data, int *sz) {
     assert(data != NULL);
 
-    *data = (uint8_t*)malloc(m_width * m_height * 3);
-    for (int x = 0; x < m_width; x = x + 1) {
-        for (int y = 0; y < m_height; y = y + 1) {
-            uint32_t clr = _color3ToUInt(frameBuffer->getColorBuffer(x, y));
+    *data = (uint8_t*)malloc(_width * _height * 3);
+    for (int x = 0; x < _width; x = x + 1) {
+        for (int y = 0; y < _height; y = y + 1) {
+            uint32_t clr = _color3ToUInt(_frameBuffer->getColorBuffer(x, y));
             uint8_t* p = (uint8_t*)&clr;
-            int idx = y * m_width + x;
+            int idx = y * _width + x;
             uint8_t* tmp = (*data) + idx * 3;
             // write BGR
             *(tmp + 0) = *(p + 2);
@@ -162,6 +162,6 @@ void Renderer::dumpRaw(uint8_t **data, int *sz) {
         }
     }
     if (sz != NULL) {
-        *sz = m_width * m_height * 3;
+        *sz = _width * _height * 3;
     }
 }
