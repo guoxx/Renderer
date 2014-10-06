@@ -23,6 +23,14 @@ static uint32_t _color3ToUInt(const Vec3f& color){
 
 #pragma mark ----
 
+void Renderer::orbit(Vec2f delta) {
+
+}
+
+void Renderer::dolly(float delta) {
+
+}
+
 void Renderer::lookat(Vec3f& eye, Vec3f& target, Vec3f& up){
     Vec3f u, v, w;
     w = eye - target;

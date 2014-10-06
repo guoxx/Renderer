@@ -20,6 +20,10 @@ static bool _initialized = false;
 std::shared_ptr<Renderer> renderer;
 std::shared_ptr<Scene> scene;
 
+Vec2f lastMousePoint;
+static bool leftButtonPressed = false;
+static bool rightButtonPressed = false;
+
 void _initializeEnv() {
     if (_initialized)
         return;
@@ -91,8 +95,35 @@ static void _keyPressListener(GLFWwindow* window, int key, int scancode, int act
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
+static void _mouseClickListener(GLFWwindow *window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT)
+        leftButtonPressed = (action == GLFW_PRESS);
+    else if (button == GLFW_MOUSE_BUTTON_RIGHT)
+        rightButtonPressed = (action == GLFW_PRESS);
+
+    if (leftButtonPressed || rightButtonPressed) {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        ypos = screenHeight - ypos;
+        lastMousePoint = Vec2f((float)xpos, (float)ypos);
+    }
+}
+
 static void _mouseMoveListener(GLFWwindow *window, double x, double y) {
-    
+    if (leftButtonPressed || rightButtonPressed) {
+        return;
+    }
+
+    float xpos = (float)x;
+    float ypos = screenHeight - (float)y;
+    Vec2f mouseDelta = Vec2f(xpos, ypos) - lastMousePoint;
+
+    if (leftButtonPressed)
+        renderer->orbit(mouseDelta);
+    else if (rightButtonPressed)
+        renderer->dolly(mouseDelta.y);
+
+    lastMousePoint = Vec2f(xpos, ypos);
 }
 
 int _main(int argc, char **argv) {
@@ -109,6 +140,7 @@ int _main(int argc, char **argv) {
     reshape(window, screenWidth, screenHeight);
 
     glfwSetKeyCallback(window, _keyPressListener);
+    glfwSetMouseButtonCallback(window, _mouseClickListener);
     glfwSetCursorPosCallback(window, _mouseMoveListener);
 
     glfwMakeContextCurrent(window);

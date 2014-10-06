@@ -33,6 +33,10 @@ public:
     Matrix4f& getProjectionMatrix() { return _projectionMat; }
     Matrix4f& getViewportMatrix() { return _viewportMat; }
 
+    void orbit(Vec2f delta);
+
+    void dolly(float delta);
+
     void lookat(Vec3f& eye, Vec3f& target, Vec3f& up);
 
     void setupViewParams(float fov, float aspect, float zNear, float zFar);
