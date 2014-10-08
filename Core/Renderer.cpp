@@ -21,10 +21,89 @@ static uint32_t _color3ToUInt(const Vec3f& color){
     return c;
 }
 
+static int _argMin(int cnt, double v, ...) {
+    int idx = 0, cursor = 0;
+    float min = v;
+    cnt = cnt - 1;
+
+    va_list args;
+    va_start(args, v);
+    while (cursor < cnt) {
+        float x = va_arg(args, double);
+        if (x < min) {
+            idx = cursor;
+        }
+        cursor = cursor + 1;
+    }
+    va_end(args);
+    return idx;
+}
+
+static Vec3f _nonParallelVector(Vec3f v) {
+    v.normalize();
+
+    int i = _argMin(3, v.x, v.y, v.z);
+    Vec3f u(v);
+    if (i == 0)
+        u.x = 1;
+    else if (i == 1)
+        u.y = 1;
+    else if (i == 2)
+        u.z = 1;
+    return u;
+}
+
 #pragma mark ----
 
 void Renderer::orbit(Vec2f delta) {
+//    printf("delta = %f, %f\n", delta.x, delta.y);
 
+    Vec3f u, v, w;
+    w = _eye - _target;
+    w.normalize();
+    Vec3f up = _nonParallelVector(w);
+    u = up.cross(w);
+    u.normalize();
+    v = w.cross(u);
+
+    Matrix4f basis;
+    basis.identity();
+    basis.c[0][0] = u.x;
+    basis.c[0][1] = u.y;
+    basis.c[0][2] = u.z;
+    basis.c[1][0] = v.x;
+    basis.c[1][1] = v.y;
+    basis.c[1][2] = v.z;
+    basis.c[2][0] = w.x;
+    basis.c[2][1] = w.y;
+    basis.c[2][2] = w.z;
+
+    Matrix4f basisInv = basis.inverted();
+
+    Vec3f newEye = basisInv * _eye;
+    float r = newEye.length();
+    float phi = atan2f(newEye.y, newEye.x);
+    float theta = asinf(newEye.z / r);
+
+    // increment phi and theta by mouse motion
+    printf("delta phi = %f\n", 3.14f / 2 * delta.x);
+    printf("delta theta = %f\n", 3.14f / 2 * delta.y);
+
+    phi = phi - 3.14f / 2 * delta.x;
+    theta = theta - 3.14f / 2 * delta.y;
+    float thetaLimit = (float) (89 * M_PI / 180);
+    if (theta > thetaLimit)
+        theta = thetaLimit;
+    if (theta < -thetaLimit)
+        theta = -thetaLimit;
+
+    newEye.x = r * cosf(theta) * cosf(phi);
+    newEye.y = r * cosf(theta) * sinf(phi);
+    newEye.z = r * sinf(theta);
+    newEye = basis * newEye;
+    printf("old eye = %f, %f, %f\n", _eye.x, _eye.y, _eye.z);
+    printf("new eye = %f, %f, %f\n", newEye.x, newEye.y, newEye.z);
+    lookat(newEye, _target, _up);
 }
 
 void Renderer::dolly(float delta) {
@@ -32,6 +111,10 @@ void Renderer::dolly(float delta) {
 }
 
 void Renderer::lookat(Vec3f& eye, Vec3f& target, Vec3f& up){
+    _eye = eye;
+    _target = target;
+    _up = up;
+
     Vec3f u, v, w;
     w = eye - target;
     w.normalize();

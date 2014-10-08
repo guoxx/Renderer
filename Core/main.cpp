@@ -90,6 +90,10 @@ void reshape(GLFWwindow* window, int w, int h) {
     glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
 }
 
+static Vec2f _windowToViewport(Vec2f p) {
+    return Vec2f(p.x / screenHeight * 10, (screenHeight - p.y) / screenHeight) * 10;
+}
+
 static void _keyPressListener(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
@@ -104,26 +108,24 @@ static void _mouseClickListener(GLFWwindow *window, int button, int action, int 
     if (leftButtonPressed || rightButtonPressed) {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
-        ypos = screenHeight - ypos;
-        lastMousePoint = Vec2f((float)xpos, (float)ypos);
+        lastMousePoint = _windowToViewport(Vec2f(xpos, ypos));
     }
 }
 
 static void _mouseMoveListener(GLFWwindow *window, double x, double y) {
-    if (leftButtonPressed || rightButtonPressed) {
+    if (!leftButtonPressed && !rightButtonPressed) {
         return;
     }
 
-    float xpos = (float)x;
-    float ypos = screenHeight - (float)y;
-    Vec2f mouseDelta = Vec2f(xpos, ypos) - lastMousePoint;
+    Vec2f mouseVec = _windowToViewport(Vec2f(x, y));
+    Vec2f mouseDelta = mouseVec - lastMousePoint;
 
     if (leftButtonPressed)
         renderer->orbit(mouseDelta);
     else if (rightButtonPressed)
         renderer->dolly(mouseDelta.y);
 
-    lastMousePoint = Vec2f(xpos, ypos);
+    lastMousePoint = mouseVec;
 }
 
 int _main(int argc, char **argv) {

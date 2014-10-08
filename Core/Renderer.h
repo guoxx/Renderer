@@ -65,7 +65,11 @@ public:
 private:
     int _width;
     int _height;
-    
+
+    Vec3f _eye;
+    Vec3f _target;
+    Vec3f _up;
+
     Matrix4f _modelviewMat;
     Matrix4f _projectionMat;
     Matrix4f _viewportMat;
