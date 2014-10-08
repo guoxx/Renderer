@@ -59,7 +59,7 @@ void Renderer::orbit(Vec2f delta) {
 //    printf("delta = %f, %f\n", delta.x, delta.y);
 
     Vec3f u, v, w;
-    w = _eye - _target;
+    w = _up;
     w.normalize();
     Vec3f up = _nonParallelVector(w);
     u = up.cross(w);
@@ -86,11 +86,11 @@ void Renderer::orbit(Vec2f delta) {
     float theta = asinf(newEye.z / r);
 
     // increment phi and theta by mouse motion
-    printf("delta phi = %f\n", 3.14f / 2 * delta.x);
-    printf("delta theta = %f\n", 3.14f / 2 * delta.y);
+    printf("delta phi = %f\n", M_PI_2 * delta.x);
+    printf("delta theta = %f\n", M_PI_2 * delta.y);
 
-    phi = phi - 3.14f / 2 * delta.x;
-    theta = theta - 3.14f / 2 * delta.y;
+    phi = phi - M_PI_2 * delta.x;
+    theta = theta - M_PI_2 * delta.y;
     float thetaLimit = (float) (89 * M_PI / 180);
     if (theta > thetaLimit)
         theta = thetaLimit;

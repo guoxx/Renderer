@@ -91,7 +91,7 @@ void reshape(GLFWwindow* window, int w, int h) {
 }
 
 static Vec2f _windowToViewport(Vec2f p) {
-    return Vec2f(p.x / screenHeight * 10, (screenHeight - p.y) / screenHeight) * 10;
+    return Vec2f(p.x / screenHeight, (screenHeight - p.y) / screenHeight);
 }
 
 static void _keyPressListener(GLFWwindow* window, int key, int scancode, int action, int mods) {
