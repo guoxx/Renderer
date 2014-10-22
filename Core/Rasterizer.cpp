@@ -115,66 +115,68 @@ void Rasterizer::line(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &fram
 }
 
 void Rasterizer::triangle(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &framebuffer) {
-    Vertex &a = *vertices;
-    Vertex &b = *(vertices + 1);
-    Vertex &c = *(vertices + 2);
-    #define CONVERT(val) \
-    Vec3f(val.vert.x/val.vert.w, \
-          val.vert.y/val.vert.w, \
-          val.vert.z/val.vert.w)
-    Vec3f pa = CONVERT(a);
-    Vec3f pb = CONVERT(b);
-    Vec3f pc = CONVERT(c);
-    #undef CONVERT
-    Vec3f colorA = a.color;
-    Vec3f colorB = b.color;
-    Vec3f colorC = c.color;
+    Vertex &v0 = *vertices;
+    Vertex &v1 = *(vertices + 1);
+    Vertex &v2 = *(vertices + 2);
 
-    int minx = floorf(minf(minf(pa.x, pb.x), pc.x));
-    int maxx = ceilf(maxf(maxf(pa.x, pb.x), pc.x));
-    int miny = floorf(minf(minf(pa.y, pb.y), pc.y));
-    int maxy = ceilf(maxf(maxf(pa.y, pb.y), pc.y));
+    auto invw = [](Vertex v) {
+        return Vec3f(v.vert.x/v.vert.w, v.vert.y/v.vert.w, v.vert.z/v.vert.w);
+    };
 
-    #define f(p1, p0, xvar, yvar) ((p1.y - p0.y)*(xvar) + (p0.x - p1.x)*(yvar) + (p1.x*p0.y - p0.x*p1.y))
+    Vec3f p0 = invw(v0);
+    Vec3f p1 = invw(v1);
+    Vec3f p2 = invw(v2);
+
+    auto min3f = [](float f0, float f1, float f2) { return minf(minf(f0, f1), f2); };
+    auto max3f = [](float f0, float f1, float f2) { return maxf(maxf(f0, f1), f2); };
+    
+    int minx = floorf(min3f(p0.x, p1.x, p2.x));
+    int maxx = ceilf(max3f(p0.x, p1.x, p2.x));
+    int miny = floorf(min3f(p0.y, p1.y, p2.y));
+    int maxy = ceilf(max3f(p0.y, p1.y, p2.y));
+
+    auto f = [](Vec3f p1, Vec3f p0) {
+        return [&p1, &p0](Vec3f p) {
+            return ((p1.y - p0.y) * p.x + (p0.x - p1.x) * p.y + (p1.x * p0.y - p0.x * p1.y));
+        };
+    };
 
     // TODO: frustum culling
-    float fa = f(pc, pb, pa.x, pa.y);
-    float fb = f(pc, pa, pb.x, pb.y);
-    float fg = f(pb, pa, pc.x, pc.y);
+    float fa = f(p2, p1)(p0);
+    float fb = f(p2, p0)(p1);
+    float fg = f(p1, p0)(p2);
     for (int x = minx; x <= maxx; x = x + 1) {
         for (int y = miny; y <= maxy; y = y + 1) {
-            float alpha = f(pc, pb, x, y) / fa;
-            float beta = f(pc, pa, x, y) / fb;
-            float gamma = f(pb, pa, x, y) / fg;
+            float alpha = f(p2, p1)(Vec3f(x, y, 0)) / fa;
+            float beta = f(p2, p0)(Vec3f(x, y, 0)) / fb;
+            float gamma = f(p1, p0)(Vec3f(x, y, 0)) / fg;
             if (alpha > 0 && beta > 0 && gamma > 0) {
-                float z = pa.z + beta * (pb.z - pa.z) + gamma * (pc.z - pa.z);
+                float z = p0.z + beta * (p1.z - p0.z) + gamma * (p2.z - p0.z);
                 float zval = framebuffer.getDepthBuffer(x, y);
                 if (z > zval)
                     continue;
 
                 if (_tex != NULL) {
-                    float h0 = a.vert.w;
-                    float h1 = b.vert.w;
-                    float h2 = c.vert.w;
+                    float h0 = v0.vert.w;
+                    float h1 = v1.vert.w;
+                    float h2 = v2.vert.w;
                     float denominator = h1*h2 + h2*beta*(h0-h1) + h1*gamma*(h0-h2);
                     float beta_w = h0 * h2 * beta / denominator;
                     float gamma_w = h0 * h1 * gamma / denominator;
                     float alpha_w = 1.0f - beta_w - gamma_w;
 
-                    float u = a.texCoord.x * alpha_w + b.texCoord.x * beta_w + c.texCoord.x * gamma_w;
-                    float v = a.texCoord.y * alpha_w + b.texCoord.y * beta_w + c.texCoord.y * gamma_w;
+                    float u = v0.texCoord.x * alpha_w + v1.texCoord.x * beta_w + v2.texCoord.x * gamma_w;
+                    float v = v0.texCoord.y * alpha_w + v1.texCoord.y * beta_w + v2.texCoord.y * gamma_w;
                     Vec3f color = _tex->getColor(u, v);
                     framebuffer.setColorBuffer(x, y, color);
                     framebuffer.setDepthBuffer(x, y, z);
                 }
                 else {
-                    Vec3f color = colorA + (colorB - colorA) * beta + (colorC - colorA) * gamma;
+                    Vec3f color = v0.color + (v1.color - v0.color) * beta + (v2.color - v0.color) * gamma;
                     framebuffer.setColorBuffer(x, y, color);
                     framebuffer.setDepthBuffer(x, y, z);
                 }
             }
         }
     }
-    
-    #undef f
 }
