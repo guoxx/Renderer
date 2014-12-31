@@ -2,6 +2,7 @@
 #define __RENDERER__TEXTURE__
 
 #include <cstdlib>
+#include <cstdint>
 #include <sys/types.h>
 #include "utMath.h"
 

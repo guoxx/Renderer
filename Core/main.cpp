@@ -1,5 +1,5 @@
-#define GLFW_EXPOSE_NATIVE_COCOA
-#define GLFW_EXPOSE_NATIVE_NSGL
+#define GLFW_EXPOSE_NATIVE_WIN32
+#define GLFW_EXPOSE_NATIVE_WGL
 
 #include <stdio.h>
 #include <math.h>
@@ -11,6 +11,7 @@
 #include "SceneMesh.h"
 #include "ConstColorVP.h"
 #include "TrivialColorFP.h"
+
 
 GLuint texId = 0;
 int screenWidth = 512;
@@ -31,7 +32,7 @@ void _initializeEnv() {
     renderer = std::make_shared<Renderer>(screenWidth, screenHeight);
     renderer->setupPipeline(std::make_shared<ConstColorVP>(), std::make_shared<TrivialColorFP>());
     scene = std::make_shared<SceneMesh>();
-    const char *file = "../../Resources/bunny500.msh";
+    const char *file = "../Resources/bunny500.msh";
     scene->load(*file);
     scene->setup(*renderer);
 }
@@ -49,7 +50,7 @@ void redraw() {
     renderer->dumpRaw(&data, NULL);
 
     glBindTexture(GL_TEXTURE_2D, texId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, screenWidth, screenHeight, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, screenWidth, screenHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, data);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     free(data);

@@ -8,7 +8,7 @@ SET(${PROJECT_NAME}_MINOR_VERSION 1)
 SET(${PROJECT_NAME}_PATCH_LEVEL 0)
 
 # Look for required GLFW library
-find_package(GLFW)
+# find_package(GLFW)
 
 # Set binaries output folder.
 SET(RENDERER_OUTPUT_PATH_PREFIX "${PROJECT_BINARY_DIR}/Binaries")
@@ -79,6 +79,17 @@ add_executable(renderer
         ${SCENE_SRCS}
     )
 
-FIND_LIBRARY(OPENGL_LIBRARY OpenGL)
-FIND_LIBRARY(GLFW_LIBRARY GLFW)
-target_link_libraries(renderer ${GLFW_LIBRARY} ${OPENGL_LIBRARY})
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    IF(MSVC)
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DSECURE_SCL=0")        
+    ENDIF(MSVC)
+    FIND_PACKAGE(OpenGL REQUIRED)
+    target_link_libraries(renderer ${OPENGL_gl_LIBRARY})
+endif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    FIND_LIBRARY(OPENGL_LIBRARY OpenGL32)
+    FIND_LIBRARY(GLFW_LIBRARY GLFW)
+    target_link_libraries(renderer ${GLFW_LIBRARY} ${OPENGL_LIBRARY})
+endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

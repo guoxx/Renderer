@@ -6,7 +6,6 @@
 #include <cstring>
 
 #include <sys/stat.h>
-#include <unistd.h>
 
 #pragma pack(1)
 struct TgaHeader {
@@ -89,7 +88,7 @@ bool Texture::dumpTga(const char &file, bool overwrite) {
         return false;
 
     struct TgaHeader hdr;
-    bzero(&hdr, sizeof(hdr));
+	memset(&hdr, 0, sizeof(hdr));
     hdr.datatypecode = 2;
     hdr.width = _width;
     hdr.height = _height;

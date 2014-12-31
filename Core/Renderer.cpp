@@ -8,8 +8,10 @@
 #include "Texture.h"
 
 #include <stdio.h>
-#include <unistd.h>
+// #include <unistd.h>
+#define _USE_MATH_DEFINES
 #include <math.h>
+#include <stdarg.h>
 
 static uint32_t _color3ToUInt(const Vec3f& color){
     uint32_t c;
@@ -86,8 +88,8 @@ void Renderer::orbit(Vec2f delta) {
     float theta = asinf(newEye.z / r);
 
     // increment phi and theta by mouse motion
-    printf("delta phi = %f\n", M_PI_2 * delta.x);
-    printf("delta theta = %f\n", M_PI_2 * delta.y);
+    //printf("delta phi = %f\n", M_PI_2 * delta.x);
+    //printf("delta theta = %f\n", M_PI_2 * delta.y);
 
     phi = phi - M_PI_2 * delta.x;
     theta = theta - M_PI_2 * delta.y;

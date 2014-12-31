@@ -79,7 +79,7 @@ bool SceneMesh::load(const char &file){
     int sz = ftell(f);
     fseek(f, 0, SEEK_SET);
 
-    char buf[sz];
+	char* buf = (char*)malloc(sz);
     assert(fread(buf, 1, sz, f) == sz);
 
     struct FReader ud {sz, 0};
@@ -110,6 +110,7 @@ bool SceneMesh::load(const char &file){
         }
         line = _readline(&ud, buf);
     }
+	free(buf);
     return true;
 }
 
