@@ -55,8 +55,6 @@ static Vec3f _nonParallelVector(Vec3f v) {
     return u;
 }
 
-#pragma mark ----
-
 void Renderer::orbit(Vec2f delta) {
 //    printf("delta = %f, %f\n", delta.x, delta.y);
 
@@ -171,11 +169,6 @@ void Renderer::viewport(int x, int y, int w, int h){
     _viewportMat.c[3][0] = cx;
     _viewportMat.c[1][1] = h/2;
     _viewportMat.c[3][1] = cy;
-}
-
-void Renderer::setupPipeline(std::shared_ptr<VertexProcessor> vp, std::shared_ptr<FragmentProcessor> fp) {
-    _vp = vp;
-    _fp = fp;
 }
 
 void Renderer::clearDepthBuffer(float val) {

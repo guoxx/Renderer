@@ -55,32 +55,22 @@ static bool _readfloat(struct FReader *reader, char *buf, float *val) {
     return false;
 }
 
-SceneMesh::SceneMesh()
-: _pointCnt(0)
-, _polyCnt(0)
-, _vertices(nullptr)
-, _texcoords(nullptr)
-, _triangles(nullptr){
-}
-
-SceneMesh::~SceneMesh() {
-    if (_vertices != nullptr) delete [] _vertices;
-    if (_texcoords != nullptr) delete [] _texcoords;
-    if (_triangles != nullptr) delete [] _triangles;
-}
-
-bool SceneMesh::load(const char* file){
-    FILE *f = fopen(file, "rb");
-    if (f == NULL) {
+SceneMesh::SceneMesh(std::string& file)
+{
+    FILE *f = fopen(file.c_str(), "rb");
+    if (f == nullptr)
+	{
+		char msg[2048];
 		char cwd[1024];
 		getcwd(cwd, 1024);
-        printf("%s:%d, cwd: %s, open file error: %s", __FILE__, __LINE__, cwd, strerror(errno));
-        return false;
+        sprintf(msg, "%s:%d, cwd: %s, open file error: %s", __FILE__, __LINE__, cwd, strerror(errno));
+		throw std::ios_base::failure{msg};
     }
 
     fseek(f, 0, SEEK_END);
     int sz = ftell(f);
     fseek(f, 0, SEEK_SET);
+	assert(sz > 0);
 
 	char* buf = (char*)malloc(sz);
     assert(fread(buf, 1, sz, f) == sz);
@@ -90,9 +80,13 @@ bool SceneMesh::load(const char* file){
     _readint(&ud, buf, &_pointCnt);
     _readint(&ud, buf, &_polyCnt);
 
-    _vertices = new float[_pointCnt * 3];
-    _texcoords = new float[_pointCnt * 2];
-    _triangles = new int[_polyCnt * 3];
+	_verticesPtr = std::unique_ptr<float[]>(new float[_pointCnt * 3]);
+    _texcoordsPtr = std::unique_ptr<float[]>(new float[_pointCnt * 2]);
+    _trianglesPtr = std::unique_ptr<int[]>(new int[_polyCnt * 3]);
+
+	float* _vertices = _verticesPtr.get();
+	float* _texcoords = _texcoordsPtr.get();
+	int* _triangles = _trianglesPtr.get();
 
     char *line = _readline(&ud, buf);
     while (line != nullptr) {
@@ -114,7 +108,6 @@ bool SceneMesh::load(const char* file){
         line = _readline(&ud, buf);
     }
 	free(buf);
-    return true;
 }
 
 void SceneMesh::setup(Renderer &renderer) {
@@ -133,6 +126,10 @@ void SceneMesh::update(Renderer &renderer) {
 void SceneMesh::render(Renderer &renderer){
     renderer.clearDepthBuffer(10.0f);
     renderer.clearColorBuffer(Vec3f(0, 0, 0));
+
+	float* _vertices = _verticesPtr.get();
+	float* _texcoords = _texcoordsPtr.get();
+	int* _triangles = _trianglesPtr.get();
 
     for (int i = 0; i < _polyCnt * 3; i = i + 3) {
         int iv0 = 3 * _triangles[i + 0];

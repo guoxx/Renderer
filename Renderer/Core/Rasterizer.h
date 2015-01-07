@@ -1,5 +1,4 @@
-#ifndef __RASTERIZER_H__
-#define __RASTERIZER_H__
+#pragma once
 
 #include <cassert>
 #include <memory>
@@ -12,15 +11,6 @@ class Texture;
 
 class Rasterizer {
 public:
-    Rasterizer()
-    : _tex(nullptr) {
-        
-    }
-
-    ~Rasterizer() {
-        _tex = nullptr;
-    }
-
     void setupTexture(std::shared_ptr<Texture> t) {
         _tex = t;
     }
@@ -32,5 +22,3 @@ private:
 
     std::shared_ptr<Texture> _tex;
 };
-
-#endif

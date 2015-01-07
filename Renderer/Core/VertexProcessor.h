@@ -1,5 +1,4 @@
-#ifndef __VERTEXPROCESSOR_H__
-#define __VERTEXPROCESSOR_H__
+#pragma once
 
 #include "utMath.h"
 
@@ -17,5 +16,3 @@ protected:
     Matrix4f _mvMat;
     Matrix4f _vpMat;
 };
-
-#endif

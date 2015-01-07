@@ -1,5 +1,4 @@
-#ifndef __RENDERER__TEXTURE__
-#define __RENDERER__TEXTURE__
+#pragma once
 
 #include <cstdlib>
 #include <cstdint>
@@ -32,5 +31,3 @@ private:
     long _size;
     uint8_t *_data;
 };
-
-#endif /* defined(__RENDERER__TEXTURE__) */

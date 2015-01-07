@@ -31,10 +31,9 @@ void _initializeEnv() {
         return;
 
     renderer = std::make_shared<Renderer>(screenWidth, screenHeight);
-    renderer->setupPipeline(std::make_shared<ConstColorVP>(), std::make_shared<TrivialColorFP>());
-    scene = std::make_shared<SceneMesh>();
-    const char *file = "../../Resources/bunny500.msh";
-    scene->load(file);
+    renderer->setupPipeline<ConstColorVP, TrivialColorFP>();
+	std::string mesh{"../../Resources/bunny500.msh"};
+    scene = std::make_shared<SceneMesh>(mesh);
     scene->setup(*renderer);
 }
 
@@ -79,13 +78,15 @@ void render() {
 }
 
 void reshape(GLFWwindow* window, int w, int h) {
-    // TODO: retina display support
-    glViewport( 0, 0, (GLsizei)w * 2, (GLsizei)h * 2 );
+	screenWidth = w;
+	screenHeight = h;
 
-    glMatrixMode( GL_PROJECTION );
+    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    glMatrixMode( GL_MODELVIEW );
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     float ratio = w / (float)h;
@@ -136,13 +137,14 @@ int _main(int argc, char **argv) {
     }
 
     GLFWwindow *window = glfwCreateWindow(screenWidth, screenHeight, "Renderer", NULL, NULL);
-    if (window == NULL) {
+    if (window == nullptr) {
         glfwTerminate();
         return -1;
     }
 
     reshape(window, screenWidth, screenHeight);
 
+	glfwSetWindowSizeCallback(window, reshape);
     glfwSetKeyCallback(window, _keyPressListener);
     glfwSetMouseButtonCallback(window, _mouseClickListener);
     glfwSetCursorPosCallback(window, _mouseMoveListener);
