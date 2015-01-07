@@ -1,5 +1,4 @@
-#ifndef __RENDERER__CONSTCOLORVP__
-#define __RENDERER__CONSTCOLORVP__
+#pragma once
 
 #include "VertexProcessor.h"
 #include "Renderer.h"
@@ -22,7 +21,7 @@ class ConstColorVP : public VertexProcessor {
     void triangle(Vec3f *v, Vec3f *n, Vec3f *c, Vec3f *t, Vertex *vert) {
         for (int i = 0; i < 3; i = i + 1) {
             (vert + i)->vert = _mvpMat * (Vec4f(*(v + i)));
-            // caculate normal and color
+            // calculate normal and color
             (vert + i)->normal = *(n + i);
             (vert + i)->color = *(c + i);
             (vert + i)->vEye = _mvMat * (*(v + i));
@@ -33,5 +32,3 @@ class ConstColorVP : public VertexProcessor {
         }
     }
 };
-
-#endif /* defined(__RENDERER__CONSTCOLORVP__) */

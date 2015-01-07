@@ -1,5 +1,4 @@
-#ifndef __RENDERER__VERTEX__
-#define __RENDERER__VERTEX__
+#pragma once
 
 #include "utMath.h"
 
@@ -10,5 +9,3 @@ typedef struct Vertex {
     Vec3f vEye;
     Vec2f texCoord;
 } Vertex;
-
-#endif /* defined(__RENDERER__VERTEX__) */

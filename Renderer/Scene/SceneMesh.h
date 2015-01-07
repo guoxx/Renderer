@@ -1,15 +1,14 @@
-#ifndef __RENDERER__SCENEMESH__
-#define __RENDERER__SCENEMESH__
+#pragma once
 
-#include <stdio.h>
-#include <Scene.h>
+#include <iostream>
+#include <memory>
+#include "Scene.h"
 
 class SceneMesh : public Scene{
 public:
-    SceneMesh();
-    virtual ~SceneMesh();
+	SceneMesh(std::string& file);
+    ~SceneMesh() override final = default;
 
-    bool load(const char* file);
     void setup(Renderer &renderer);
     void update(Renderer &renderer);
     void render(Renderer &renderer);
@@ -17,9 +16,7 @@ public:
 private:
     int _pointCnt;
     int _polyCnt;
-    float *_vertices;
-    float *_texcoords;
-    int *_triangles;
+	std::unique_ptr<float[]> _verticesPtr;
+    std::unique_ptr<float[]> _texcoordsPtr;
+    std::unique_ptr<int[]> _trianglesPtr;
 };
-
-#endif /* defined(__RENDERER__SCENEMESH__) */

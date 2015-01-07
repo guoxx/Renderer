@@ -1,5 +1,4 @@
-#ifndef __RENDERER_H__
-#define __RENDERER_H__
+#pragma once
 
 #include <cstdint>
 #include <cstdlib>
@@ -18,20 +17,24 @@ class FragmentProcessor;
 class Renderer {
 public:
     Renderer(int w, int h)
-    : _width(w)
-    , _height(h){
-        _frameBuffer = std::make_shared<FrameBuffer>(_width, _height);
+		: _width{w}
+		, _height{h}
+		, _frameBuffer{std::make_shared<FrameBuffer>(_width, _height)}
+	{
     }
 
-    ~Renderer() {
-        _frameBuffer = nullptr;
-    }
+	Renderer(const Renderer&) = delete;
+	Renderer& operator= (const Renderer&) = delete;
+	Renderer(const Renderer&&) = delete;
+	Renderer& operator= (const Renderer&&) = delete;
 
-    int getWidth() { return _width; }
-    int getHeight() { return _height; }
-    Matrix4f& getModelViewMatrix() { return _modelviewMat; }
-    Matrix4f& getProjectionMatrix() { return _projectionMat; }
-    Matrix4f& getViewportMatrix() { return _viewportMat; }
+    ~Renderer() = default;
+
+    int getWidth() const { return _width; }
+    int getHeight() const { return _height; }
+    const Matrix4f& getModelViewMatrix() const { return _modelviewMat; }
+    const Matrix4f& getProjectionMatrix() const { return _projectionMat; }
+    const Matrix4f& getViewportMatrix() const { return _viewportMat; }
 
     void orbit(Vec2f delta);
 
@@ -43,7 +46,12 @@ public:
     
     void viewport(int x, int y, int w, int h);
 
-    void setupPipeline(std::shared_ptr<VertexProcessor> vp, std::shared_ptr<FragmentProcessor> fp);
+	template<typename VP, typename FP>
+	void setupPipeline()
+	{
+		_vp = std::make_shared<VP>();
+		_fp = std::make_shared<FP>();
+	}
 
     void clearDepthBuffer(float val);
 
@@ -78,5 +86,3 @@ private:
     std::shared_ptr<VertexProcessor> _vp;
     std::shared_ptr<FragmentProcessor> _fp;
 };
-
-#endif

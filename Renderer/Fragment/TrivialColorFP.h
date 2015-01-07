@@ -1,5 +1,4 @@
-#ifndef __RENDERER__TRIVIALCOLORFP__
-#define __RENDERER__TRIVIALCOLORFP__
+#pragma once
 
 #include "FragmentProcessor.h"
 #include "Fragment.h"
@@ -10,5 +9,3 @@ class TrivialColorFP : public FragmentProcessor {
         framebuffer.setColorBuffer(frag.x, frag.y, frag.color);
     }
 };
-
-#endif /* defined(__RENDERER__TRIVIALCOLORFP__) */

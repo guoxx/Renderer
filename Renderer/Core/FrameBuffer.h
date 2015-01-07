@@ -1,5 +1,4 @@
-#ifndef __RENDERER__FRAMEBUFFER__
-#define __RENDERER__FRAMEBUFFER__
+#pragma once
 
 #include "utMath.h"
 #include <cassert>
@@ -40,5 +39,3 @@ private:
     Vec3f *_colorBuffer;
     float *_depthBuffer;
 };
-
-#endif /* defined(__RENDERER__FRAMEBUFFER__) */

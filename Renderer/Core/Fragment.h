@@ -1,9 +1,11 @@
-#ifndef __RENDERER__FRAGMENT__
-#define __RENDERER__FRAGMENT__
+#pragma once
 
+#include <type_traits>
 #include "utMath.h"
 
-typedef struct Fragment {
+class Fragment
+{
+public:
     /** The user-interpolated normal */
     Vec3f normal;
 
@@ -21,6 +23,4 @@ typedef struct Fragment {
 
     /** the depth coordinate */
     float depth;
-} Fragment;
-
-#endif /* defined(__RENDERER__FRAGMENT__) */
+};
