@@ -1,6 +1,5 @@
 #pragma once
 
-#include <type_traits>
 #include "utMath.h"
 
 class Fragment

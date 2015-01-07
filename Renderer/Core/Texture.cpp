@@ -77,7 +77,7 @@ bool Texture::loadTga(const char &file) {
 bool Texture::dumpTga(const char &file, bool overwrite) {
     bool fileExist = (stat(&file, NULL) == 0);
     if (fileExist && overwrite) {
-        if ( unlink(&file) != 0 ) {
+        if ( remove(&file) != 0 ) {
             printf("delete file %s failed! error : %s\n", &file, strerror(errno));
             return false;
         }

@@ -5,7 +5,12 @@
 #include <cstdio>
 #include <cerrno>
 #include <cassert>
+
+#if defined __APPLE__
+#include <unistd.h>
+#elif defined _WIN32 || defined _WIN64
 #include <direct.h>
+#endif
 
 struct FReader {
     int size;

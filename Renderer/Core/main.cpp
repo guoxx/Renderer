@@ -1,5 +1,4 @@
-#define GLFW_EXPOSE_NATIVE_WIN32
-#define GLFW_EXPOSE_NATIVE_WGL
+#include "utDefines.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -26,18 +25,20 @@ Vec2f lastMousePoint;
 static bool leftButtonPressed = false;
 static bool rightButtonPressed = false;
 
-void _initializeEnv() {
+void _initializeEnv()
+{
     if (_initialized)
         return;
 
     renderer = std::make_shared<Renderer>(screenWidth, screenHeight);
     renderer->setupPipeline<ConstColorVP, TrivialColorFP>();
-	std::string mesh{"../../Resources/bunny500.msh"};
+	std::string mesh{"../../../Resources/bunny500.msh"};
     scene = std::make_shared<SceneMesh>(mesh);
     scene->setup(*renderer);
 }
 
-void _finalizeEnv() {
+void _finalizeEnv()
+{
     scene = nullptr;
     renderer = nullptr;
 }
@@ -56,7 +57,8 @@ void redraw() {
     free(data);
 }
 
-void render() {
+void render()
+{
     redraw();
 
     GLFWwindow *window = glfwGetCurrentContext();
@@ -77,7 +79,8 @@ void render() {
     glfwSwapBuffers(window);
 }
 
-void reshape(GLFWwindow* window, int w, int h) {
+void reshape(GLFWwindow* window, int w, int h)
+{
 	screenWidth = w;
 	screenHeight = h;
 
@@ -93,30 +96,36 @@ void reshape(GLFWwindow* window, int w, int h) {
     glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
 }
 
-static Vec2f _windowToViewport(Vec2f p) {
+static Vec2f _windowToViewport(Vec2f p)
+{
     return Vec2f(p.x / screenHeight, (screenHeight - p.y) / screenHeight);
 }
 
-static void _keyPressListener(GLFWwindow* window, int key, int scancode, int action, int mods) {
+static void _keyPressListener(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-static void _mouseClickListener(GLFWwindow *window, int button, int action, int mods) {
+static void _mouseClickListener(GLFWwindow *window, int button, int action, int mods)
+{
     if (button == GLFW_MOUSE_BUTTON_LEFT)
         leftButtonPressed = (action == GLFW_PRESS);
     else if (button == GLFW_MOUSE_BUTTON_RIGHT)
         rightButtonPressed = (action == GLFW_PRESS);
 
-    if (leftButtonPressed || rightButtonPressed) {
+    if (leftButtonPressed || rightButtonPressed)
+    {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
         lastMousePoint = _windowToViewport(Vec2f(xpos, ypos));
     }
 }
 
-static void _mouseMoveListener(GLFWwindow *window, double x, double y) {
-    if (!leftButtonPressed && !rightButtonPressed) {
+static void _mouseMoveListener(GLFWwindow *window, double x, double y)
+{
+    if (!leftButtonPressed && !rightButtonPressed)
+    {
         return;
     }
 
@@ -131,13 +140,16 @@ static void _mouseMoveListener(GLFWwindow *window, double x, double y) {
     lastMousePoint = mouseVec;
 }
 
-int _main(int argc, char **argv) {
-    if (!glfwInit()) {
+int _main(int argc, char **argv)
+{
+    if (!glfwInit())
+    {
         return -1;
     }
 
     GLFWwindow *window = glfwCreateWindow(screenWidth, screenHeight, "Renderer", NULL, NULL);
-    if (window == nullptr) {
+    if (window == nullptr)
+    {
         glfwTerminate();
         return -1;
     }
@@ -161,7 +173,8 @@ int _main(int argc, char **argv) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window))
+    {
         glfwPollEvents();
         render();
     }
@@ -170,7 +183,8 @@ int _main(int argc, char **argv) {
     return 0;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     _initializeEnv();
     int ret = _main(argc, argv);
     _finalizeEnv();
