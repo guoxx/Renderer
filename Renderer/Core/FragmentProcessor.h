@@ -1,6 +1,6 @@
 #pragma once
 
-struct Fragment;
+class Fragment;
 class FrameBuffer;
 
 class FragmentProcessor {
