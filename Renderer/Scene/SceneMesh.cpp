@@ -72,7 +72,8 @@ SceneMesh::SceneMesh(std::string& file)
     fseek(f, 0, SEEK_SET);
 	assert(sz > 0);
 
-	char* buf = (char*)malloc(sz);
+	std::unique_ptr<char[]> bufPtr{new char[sz]};
+	char* buf = bufPtr.get();
     assert(fread(buf, 1, sz, f) == sz);
 
     struct FReader ud {sz, 0};
@@ -84,30 +85,29 @@ SceneMesh::SceneMesh(std::string& file)
     _texcoordsPtr = std::unique_ptr<float[]>(new float[_pointCnt * 2]);
     _trianglesPtr = std::unique_ptr<int[]>(new int[_polyCnt * 3]);
 
-	float* _vertices = _verticesPtr.get();
-	float* _texcoords = _texcoordsPtr.get();
-	int* _triangles = _trianglesPtr.get();
+	float* vertices = _verticesPtr.get();
+	float* texcoords = _texcoordsPtr.get();
+	int* triangles = _trianglesPtr.get();
 
     char *line = _readline(&ud, buf);
     while (line != nullptr) {
         if (strcmp(line, "vertices") == 0) {
             for (int i = 0; i < _pointCnt * 3; ++i) {
-                _readfloat(&ud, buf, _vertices + i);
+                _readfloat(&ud, buf, vertices + i);
             }
         }
         else if( strcmp(line, "texcoords") == 0) {
             for (int i = 0; i < _pointCnt * 2; ++i) {
-                _readfloat(&ud, buf, _texcoords + i);
+                _readfloat(&ud, buf, texcoords + i);
             }
         }
         else if( strcmp(line, "triangles") == 0) {
             for (int i = 0; i < _polyCnt * 3; ++i) {
-                _readint(&ud, buf, _triangles + i);
+                _readint(&ud, buf, triangles + i);
             }
         }
         line = _readline(&ud, buf);
     }
-	free(buf);
 }
 
 void SceneMesh::setup(Renderer &renderer) {
@@ -127,19 +127,19 @@ void SceneMesh::render(Renderer &renderer){
     renderer.clearDepthBuffer(10.0f);
     renderer.clearColorBuffer(Vec3f(0, 0, 0));
 
-	float* _vertices = _verticesPtr.get();
-	float* _texcoords = _texcoordsPtr.get();
-	int* _triangles = _trianglesPtr.get();
+	float* vertices = _verticesPtr.get();
+	float* texcoords = _texcoordsPtr.get();
+	int* triangles = _trianglesPtr.get();
 
     for (int i = 0; i < _polyCnt * 3; i = i + 3) {
-        int iv0 = 3 * _triangles[i + 0];
-        int iv1 = 3 * _triangles[i + 1];
-        int iv2 = 3 * _triangles[i + 2];
+        int iv0 = 3 * triangles[i + 0];
+        int iv1 = 3 * triangles[i + 1];
+        int iv2 = 3 * triangles[i + 2];
 
         Vec3f v[3] = {
-            Vec3f(_vertices[iv0], _vertices[iv0 + 1], _vertices[iv0 + 2]),
-            Vec3f(_vertices[iv1], _vertices[iv1 + 1], _vertices[iv1 + 2]),
-            Vec3f(_vertices[iv2], _vertices[iv2 + 1], _vertices[iv2 + 2])
+            Vec3f(vertices[iv0], vertices[iv0 + 1], vertices[iv0 + 2]),
+            Vec3f(vertices[iv1], vertices[iv1 + 1], vertices[iv1 + 2]),
+            Vec3f(vertices[iv2], vertices[iv2 + 1], vertices[iv2 + 2])
         };
 
         Vec3f c[3] = {
@@ -155,9 +155,9 @@ void SceneMesh::render(Renderer &renderer){
         };
 
         Vec3f t[3] = {
-            Vec3f(_texcoords[_triangles[i + 0] * 2], _texcoords[_triangles[i + 0] * 2 + 1], 0),
-            Vec3f(_texcoords[_triangles[i + 1] * 2], _texcoords[_triangles[i + 1] * 2 + 1], 0),
-            Vec3f(_texcoords[_triangles[i + 2] * 2], _texcoords[_triangles[i + 2] * 2 + 1], 0)
+            Vec3f(texcoords[triangles[i + 0] * 2], texcoords[triangles[i + 0] * 2 + 1], 0),
+            Vec3f(texcoords[triangles[i + 1] * 2], texcoords[triangles[i + 1] * 2 + 1], 0),
+            Vec3f(texcoords[triangles[i + 2] * 2], texcoords[triangles[i + 2] * 2 + 1], 0)
         };
 
         renderer.renderTriangle(3, v, c, n, t, nullptr);
