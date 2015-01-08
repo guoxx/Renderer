@@ -4,14 +4,16 @@
 #include <memory>
 #include "Texture.h"
 
-struct Vertex;
+class Vertex;
 class FragmentProcessor;
 class FrameBuffer;
 class Texture;
 
-class Rasterizer {
+class Rasterizer
+{
 public:
-    void setupTexture(std::shared_ptr<Texture> t) {
+    void setupTexture(std::shared_ptr<Texture> t)
+	{
         _tex = t;
     }
 

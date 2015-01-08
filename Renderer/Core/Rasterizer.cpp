@@ -24,11 +24,11 @@ void Rasterizer::line(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &fram
     int i0 = (p[0].x <= p[1].x) ? 0 : 1;
     int i1 = (i0 + 1) % 2;
 
-    int x0 = p[i0].x;
-    int y0 = p[i0].y;
+    int x0 = static_cast<int>(p[i0].x);
+    int y0 = static_cast<int>(p[i0].y);
     float z0 = p[i0].z;
-    int x1 = p[i1].x;
-    int y1 = p[i1].y;
+    int x1 = static_cast<int>(p[i1].x);
+    int y1 = static_cast<int>(p[i1].y);
     float z1 = p[i1].z;
     float len = (p[i0] - p[i1]).length();
     Vec3f deltaColor = (cl[i1] - cl[i0]) / len;
@@ -130,26 +130,24 @@ void Rasterizer::triangle(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &
     auto min3f = [](float f0, float f1, float f2) { return minf(minf(f0, f1), f2); };
     auto max3f = [](float f0, float f1, float f2) { return maxf(maxf(f0, f1), f2); };
     
-    int minx = floorf(min3f(p0.x, p1.x, p2.x));
-    int maxx = ceilf(max3f(p0.x, p1.x, p2.x));
-    int miny = floorf(min3f(p0.y, p1.y, p2.y));
-    int maxy = ceilf(max3f(p0.y, p1.y, p2.y));
+	int minx{static_cast<int>(floorf(min3f(p0.x, p1.x, p2.x)))};
+	int maxx{static_cast<int>(ceilf(max3f(p0.x, p1.x, p2.x)))};
+	int miny{static_cast<int>(floorf(min3f(p0.y, p1.y, p2.y)))};
+	int maxy{static_cast<int>(ceilf(max3f(p0.y, p1.y, p2.y)))};
 
-    auto f = [](Vec3f p1, Vec3f p0) {
-        return [&p1, &p0](Vec3f p) {
-            return ((p1.y - p0.y) * p.x + (p0.x - p1.x) * p.y + (p1.x * p0.y - p0.x * p1.y));
-        };
+    auto f = [](Vec3f& p1, Vec3f& p0, Vec3f& p) {
+        return ((p1.y - p0.y) * p.x + (p0.x - p1.x) * p.y + (p1.x * p0.y - p0.x * p1.y));
     };
 
     // TODO: frustum culling
-    float fa = f(p2, p1)(p0);
-    float fb = f(p2, p0)(p1);
-    float fg = f(p1, p0)(p2);
+    float fa = f(p2, p1, p0);
+    float fb = f(p2, p0, p1);
+    float fg = f(p1, p0, p2);
     for (int x = minx; x <= maxx; x = x + 1) {
         for (int y = miny; y <= maxy; y = y + 1) {
-            float alpha = f(p2, p1)(Vec3f(x, y, 0)) / fa;
-            float beta = f(p2, p0)(Vec3f(x, y, 0)) / fb;
-            float gamma = f(p1, p0)(Vec3f(x, y, 0)) / fg;
+            float alpha = f(p2, p1, Vec3f(x, y, 0)) / fa;
+            float beta = f(p2, p0, Vec3f(x, y, 0)) / fb;
+            float gamma = f(p1, p0, Vec3f(x, y, 0)) / fg;
             if (alpha > 0 && beta > 0 && gamma > 0) {
                 float z = p0.z + beta * (p1.z - p0.z) + gamma * (p2.z - p0.z);
                 float zval = framebuffer.getDepthBuffer(x, y);

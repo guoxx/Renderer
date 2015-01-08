@@ -3,14 +3,22 @@
 #include "utMath.h"
 #include <cassert>
 
-class FrameBuffer {
+class FrameBuffer
+{
 public:
-    FrameBuffer(int w, int h) {
-        _width = w;
-        _height = h;
-        _colorBuffer = new Vec3f[_width * _height];
-        _depthBuffer = new float[_width * _height];
+    FrameBuffer(int w, int h)
+	try
+		: _width{w}
+		, _height{h}
+		, _colorBuffer{new Vec3f[w * h]}
+		, _depthBuffer{new float[w * h]}
+	{
     }
+	catch(std::bad_alloc&)
+	{
+		if (_colorBuffer != nullptr) { delete[] _colorBuffer; }
+		if (_depthBuffer != nullptr) { delete[] _depthBuffer; }
+	}
 
     ~FrameBuffer() {
         delete [] _colorBuffer;
@@ -36,6 +44,6 @@ public:
 private:
     int _width;
     int _height;
-    Vec3f *_colorBuffer;
-    float *_depthBuffer;
+    Vec3f* _colorBuffer;
+    float* _depthBuffer;
 };

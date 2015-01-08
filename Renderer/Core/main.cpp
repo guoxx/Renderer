@@ -32,7 +32,7 @@ void _initializeEnv()
 
     renderer = std::make_shared<Renderer>(screenWidth, screenHeight);
     renderer->setupPipeline<ConstColorVP, TrivialColorFP>();
-	std::string mesh{"../../../Resources/bunny500.msh"};
+	std::string mesh{"../../Resources/bunny500.msh"};
     scene = std::make_shared<SceneMesh>(mesh);
     scene->setup(*renderer);
 }
@@ -118,7 +118,7 @@ static void _mouseClickListener(GLFWwindow *window, int button, int action, int 
     {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
-        lastMousePoint = _windowToViewport(Vec2f(xpos, ypos));
+		lastMousePoint = _windowToViewport(Vec2f(static_cast<float>(xpos), static_cast<float>(ypos)));
     }
 }
 
@@ -126,10 +126,10 @@ static void _mouseMoveListener(GLFWwindow *window, double x, double y)
 {
     if (!leftButtonPressed && !rightButtonPressed)
     {
-        return;
+		return;
     }
 
-    Vec2f mouseVec = _windowToViewport(Vec2f(x, y));
+    Vec2f mouseVec = _windowToViewport(Vec2f(static_cast<float>(x), static_cast<float>(y)));
     Vec2f mouseDelta = mouseVec - lastMousePoint;
 
     if (leftButtonPressed)

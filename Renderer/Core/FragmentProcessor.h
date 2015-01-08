@@ -3,7 +3,8 @@
 class Fragment;
 class FrameBuffer;
 
-class FragmentProcessor {
+class FragmentProcessor
+{
 public:
     virtual void fragment(Fragment &frag, FrameBuffer &framebuffer) = 0;
 };

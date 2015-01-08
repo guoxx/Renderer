@@ -19,7 +19,7 @@ public:
     Renderer(int w, int h)
 		: _width{w}
 		, _height{h}
-		, _frameBuffer{std::make_shared<FrameBuffer>(_width, _height)}
+		, _frameBuffer{std::make_shared<FrameBuffer>(w, h)}
 	{
     }
 

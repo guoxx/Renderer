@@ -2,10 +2,11 @@
 
 #include "utMath.h"
 
-struct Vertex;
+class Vertex;
 class Renderer;
 
-class VertexProcessor {
+class VertexProcessor
+{
 public:
     virtual void updateTransforms(Renderer &renderer) = 0;
     virtual void line(Vec3f *v, Vec3f *c, Vertex *vert) = 0;

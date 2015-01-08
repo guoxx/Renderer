@@ -17,9 +17,10 @@ IF(${CMAKE_CFG_INTDIR} STREQUAL ".")
     ENDIF(NOT RENDERER_OUTPUT_PATH_SUFFIX)
 ENDIF(${CMAKE_CFG_INTDIR} STREQUAL ".")
 
-# c++11 support
-set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
+IF(NOT MSVC)
+    set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
+ENDIF(NOT MSVC)
 
 # definitions
 add_definitions(-DCMAKE)
