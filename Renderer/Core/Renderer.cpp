@@ -12,7 +12,10 @@
 #include <math.h>
 #include <stdarg.h>
 
-static uint32_t _color3ToUInt(const Vec3f& color){
+#include <algorithm>
+
+static uint32_t _color3ToUInt(const Vec3f& color)
+{
     uint32_t c;
     uint8_t* p = (uint8_t*)&c;
     *p = uint8_t(std::fmin(color.x, 1.0f) * 255);
@@ -22,39 +25,19 @@ static uint32_t _color3ToUInt(const Vec3f& color){
     return c;
 }
 
-static int _argMin(int cnt, double v, ...) {
-    int idx = 0, cursor = 0;
-    float min = v;
-    cnt = cnt - 1;
-
-    va_list args;
-    va_start(args, v);
-    while (cursor < cnt) {
-        float x = va_arg(args, double);
-        if (x < min) {
-            idx = cursor;
-        }
-        cursor = cursor + 1;
-    }
-    va_end(args);
-    return idx;
-}
-
-static Vec3f _nonParallelVector(Vec3f v) {
+static Vec3f _nonParallelVector(Vec3f v)
+{
     v.normalize();
 
-    int i = _argMin(3, v.x, v.y, v.z);
-    Vec3f u(v);
-    if (i == 0)
-        u.x = 1;
-    else if (i == 1)
-        u.y = 1;
-    else if (i == 2)
-        u.z = 1;
-    return u;
+    std::initializer_list<float> list{v.x, v.y, v.z};
+    const float* it = std::min_element(list.begin(), list.end());
+    float* ptr = const_cast<float*>(it);
+    *ptr = 1;
+    return Vec3f{*list.begin(), *(list.begin() + 1), *(list.begin() + 2)};
 }
 
-void Renderer::orbit(Vec2f delta) {
+void Renderer::orbit(Vec2f delta)
+{
 //    printf("delta = %f, %f\n", delta.x, delta.y);
 
     Vec3f u, v, w;

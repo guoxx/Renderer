@@ -44,7 +44,7 @@ bool Texture::loadTga(const char &file) {
     }
 
     fseek(f, 0, SEEK_END);
-    long sz = ftell(f);
+    long sz{ftell(f)};
     fseek(f, 0, SEEK_SET);
     assert(sz > sizeof(struct TgaHeader));
 
@@ -57,18 +57,24 @@ bool Texture::loadTga(const char &file) {
     _height = hdr.height;
 
     _size = sz - sizeof(struct TgaHeader);
-    _data = (unsigned char*)malloc(_size);
+    _data = new unsigned char[_size];
     size_t used = fread(_data, 1, _size, f);
-    if (used != _size) {
-        free(_data);
-        _data = NULL;
+    if (used != _size)
+    {
+        delete [] _data;
+        _data = nullptr;
+
         _size = 0;
         _width = 0;
         _height = 0;
         fclose(f);
         return false;
     }
-    else {
+    else
+    {
+        delete [] _data;
+        _data = nullptr;
+
         fclose(f);
         return true;
     }

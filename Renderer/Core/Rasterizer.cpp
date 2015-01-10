@@ -135,7 +135,8 @@ void Rasterizer::triangle(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &
 	int miny{static_cast<int>(floorf(min3f(p0.y, p1.y, p2.y)))};
 	int maxy{static_cast<int>(ceilf(max3f(p0.y, p1.y, p2.y)))};
 
-    auto f = [](Vec3f& p1, Vec3f& p0, Vec3f& p) {
+    auto f = [](const Vec3f& p1, const Vec3f& p0, const Vec3f& p)
+    {
         return ((p1.y - p0.y) * p.x + (p0.x - p1.x) * p.y + (p1.x * p0.y - p0.x * p1.y));
     };
 

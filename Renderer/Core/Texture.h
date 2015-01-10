@@ -11,13 +11,15 @@ public:
     : _width(0)
     , _height(0)
     , _size(0)
-    , _data(NULL) {
+    , _data(nullptr)
+    {
     }
 
-    ~Texture() {
-        if (_data != NULL) {
-            free(_data);
-            _data = NULL;
+    ~Texture()
+    {
+        if (_data != NULL)
+        {
+            delete [] _data;
         }
     }
 

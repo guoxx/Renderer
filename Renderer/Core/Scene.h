@@ -5,7 +5,8 @@
 
 class Renderer;
 
-class Scene {
+class Scene
+{
 public:
     virtual ~Scene() {}
 

@@ -32,7 +32,7 @@ void _initializeEnv()
 
     renderer = std::make_shared<Renderer>(screenWidth, screenHeight);
     renderer->setupPipeline<ConstColorVP, TrivialColorFP>();
-	std::string mesh{"../../Resources/bunny500.msh"};
+	std::string mesh{"../../../Resources/bunny500.msh"};
     scene = std::make_shared<SceneMesh>(mesh);
     scene->setup(*renderer);
 }

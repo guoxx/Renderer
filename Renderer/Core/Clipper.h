@@ -1,5 +1,6 @@
 #pragma once
 
-class Clipper {
+class Clipper
+{
 public:
 };
