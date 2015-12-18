@@ -67,7 +67,7 @@ SceneMesh::SceneMesh(std::string& file)
 	{
 		char msg[2048];
 		char cwd[1024];
-		getcwd(cwd, 1024);
+		_getcwd(cwd, 1024);
         sprintf(msg, "%s:%d, cwd: %s, open file error: %s", __FILE__, __LINE__, cwd, strerror(errno));
 		throw std::ios_base::failure{msg};
     }

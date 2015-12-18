@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <cstdint>
 #include <cstdlib>
 #include <cassert>
@@ -8,11 +9,15 @@
 #include <memory>
 #include "utMath.h"
 #include "FrameBuffer.h"
+#include "RenderEnum.h"
+#include "RenderCommand.h"
+#include "RenderProgram.h"
 
 
 class Texture;
 class VertexProcessor;
 class FragmentProcessor;
+
 
 class Renderer {
 public:
@@ -57,6 +62,12 @@ public:
 
     void clearColorBuffer(const Vec3f &color);
     
+	void useProgram(RenderProgram& program);
+
+	void vertexAttribPointer(uint32_t index, int size, void* data);
+
+	void drawArray(RenderDrawMode mode, std::shared_ptr<std::vector<float>>& indices);
+
     void renderLine(int lineCnt,
                     Vec3f *vertices,
                     Vec3f *colors);
@@ -69,6 +80,9 @@ public:
                         std::shared_ptr<Texture> tex);
 
     void dumpRaw(uint8_t **data, int *sz);
+
+private:
+
 
 private:
     int _width;
@@ -85,4 +99,6 @@ private:
     std::shared_ptr<FrameBuffer> _frameBuffer;
     std::shared_ptr<VertexProcessor> _vp;
     std::shared_ptr<FragmentProcessor> _fp;
+
+	std::vector<RenderCommand> _cmds;
 };

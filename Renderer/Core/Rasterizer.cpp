@@ -146,9 +146,9 @@ void Rasterizer::triangle(Vertex *vertices, FragmentProcessor &fp, FrameBuffer &
     float fg = f(p1, p0, p2);
     for (int x = minx; x <= maxx; x = x + 1) {
         for (int y = miny; y <= maxy; y = y + 1) {
-            float alpha = f(p2, p1, Vec3f(x, y, 0)) / fa;
-            float beta = f(p2, p0, Vec3f(x, y, 0)) / fb;
-            float gamma = f(p1, p0, Vec3f(x, y, 0)) / fg;
+            float alpha = f(p2, p1, Vec3f(static_cast<float>(x), static_cast<float>(y), 0)) / fa;
+            float beta = f(p2, p0, Vec3f(static_cast<float>(x), static_cast<float>(y), 0)) / fb;
+            float gamma = f(p1, p0, Vec3f(static_cast<float>(x), static_cast<float>(y), 0)) / fg;
             if (alpha > 0 && beta > 0 && gamma > 0) {
                 float z = p0.z + beta * (p1.z - p0.z) + gamma * (p2.z - p0.z);
                 float zval = framebuffer.getDepthBuffer(x, y);

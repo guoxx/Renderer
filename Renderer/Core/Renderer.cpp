@@ -71,8 +71,8 @@ void Renderer::orbit(Vec2f delta)
     //printf("delta phi = %f\n", M_PI_2 * delta.x);
     //printf("delta theta = %f\n", M_PI_2 * delta.y);
 
-    phi = phi - M_PI_2 * delta.x;
-    theta = theta - M_PI_2 * delta.y;
+    phi = static_cast<float>(phi - M_PI_2 * delta.x);
+    theta = static_cast<float>(theta - M_PI_2 * delta.y);
     float thetaLimit = (float) (89 * M_PI / 180);
     if (theta > thetaLimit)
         theta = thetaLimit;
@@ -147,10 +147,10 @@ void Renderer::viewport(int x, int y, int w, int h){
     int cx = x + w / 2;
     int cy = y + h / 2;
     _viewportMat.identity();
-    _viewportMat.c[0][0] = w/2;
-    _viewportMat.c[3][0] = cx;
-    _viewportMat.c[1][1] = h/2;
-    _viewportMat.c[3][1] = cy;
+    _viewportMat.c[0][0] = static_cast<float>(w/2);
+    _viewportMat.c[3][0] = static_cast<float>(cx);
+    _viewportMat.c[1][1] = static_cast<float>(h/2);
+    _viewportMat.c[3][1] = static_cast<float>(cy);
 }
 
 void Renderer::clearDepthBuffer(float val) {
@@ -214,6 +214,19 @@ void Renderer::renderTriangle(int verticesCnt,
     }
 
     delete [] vertCache;
+}
+
+void useProgram(RenderProgram& program)
+{
+}
+
+void Renderer::drawArray(RenderDrawMode mode, std::shared_ptr<std::vector<float>>& indices)
+{
+	// TODO: not supported
+	assert(mode != RenderDrawMode::POINT);
+
+	RenderCommand cmd{mode, indices};
+	_cmds.push_back(cmd);
 }
 
 void Renderer::dumpRaw(uint8_t **data, int *sz) {

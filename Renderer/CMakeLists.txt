@@ -42,6 +42,8 @@ include_directories(
         ${CMAKE_BINARY_DIR}
     )
 
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  
 add_executable(renderer
         ${UTIL_SRCS}
         ${CORE_SRCS}
